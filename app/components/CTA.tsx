@@ -9,7 +9,7 @@ export default function CTA() {
 
   return (
     <section className="py-24 bg-[var(--cream)]" ref={ref}>
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="kd-container">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}

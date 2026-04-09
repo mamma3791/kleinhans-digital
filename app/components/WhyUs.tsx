@@ -15,7 +15,7 @@ export default function WhyUs() {
 
   return (
     <section className="py-32 bg-[var(--dark)]" ref={ref}>
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="kd-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* Left */}

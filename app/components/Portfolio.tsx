@@ -19,7 +19,7 @@ export default function Portfolio() {
 
   return (
     <section id="work" className="py-32 bg-[var(--dark2)]" ref={ref}>
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="kd-container">
 
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
