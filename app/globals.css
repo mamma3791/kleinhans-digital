@@ -6,11 +6,11 @@
   --cream2: #eceae3;
   --dark: #1a2420;
   --dark2: #0f1c15;
-  --green: #2d6a4f;
-  --green2: #1f4d39;
-  --green3: #3d7a5e;
+  --green: #3a8a62;
+  --green2: #2a6647;
+  --green3: #5dbf88;
   --muted: #6b7c74;
-  --border: rgba(45, 106, 79, 0.15);
+  --border: rgba(58, 138, 98, 0.15);
   --font-serif: 'DM Serif Display', serif;
   --font-sans: 'Outfit', sans-serif;
 }
@@ -48,7 +48,7 @@ p, span, a, button, input, textarea, li, label { font-family: var(--font-sans); 
 
 .cursor-ring {
   width: 36px; height: 36px;
-  border: 1.5px solid rgba(45, 106, 79, 0.5);
+  border: 1.5px solid rgba(58, 138, 98, 0.45);
   border-radius: 50%;
   position: fixed; top: 0; left: 0;
   pointer-events: none; z-index: 9998;
@@ -58,7 +58,7 @@ p, span, a, button, input, textarea, li, label { font-family: var(--font-sans); 
 }
 
 .cursor-dot.hovering { width: 4px; height: 4px; background: var(--green3); }
-.cursor-ring.hovering { width: 60px; height: 60px; background: rgba(45,106,79,0.08); border-color: var(--green); }
+.cursor-ring.hovering { width: 60px; height: 60px; background: rgba(58,138,98,0.07); border-color: var(--green); }
 .cursor-ring.clicking { width: 28px; height: 28px; }
 
 /* ── Layout ── */
@@ -66,10 +66,10 @@ p, span, a, button, input, textarea, li, label { font-family: var(--font-sans); 
 
 .kd-container {
   width: 100%;
-  max-width: 80rem;       /* 1280px = 7xl */
+  max-width: 80rem;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.5rem;   /* px-6 */
+  padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
 

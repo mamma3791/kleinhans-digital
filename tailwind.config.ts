@@ -13,9 +13,9 @@ const config: Config = {
         dark: '#1a2420',
         'dark2': '#0f1c15',
         green: {
-          DEFAULT: '#2d6a4f',
-          '2': '#1f4d39',
-          '3': '#3d7a5e',
+          DEFAULT: '#3a8a62',
+          '2': '#2a6647',
+          '3': '#5dbf88',
         },
       },
       maxWidth: {

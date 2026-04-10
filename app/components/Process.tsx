@@ -1,12 +1,12 @@
 "use client";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const steps = [
   { num: "01", title: "Discovery", desc: "We learn about your business, your customers, and your goals. A clear brief means a better outcome." },
   { num: "02", title: "Design", desc: "A custom design built around your brand. You review, give feedback, and we refine until it is right." },
   { num: "03", title: "Development", desc: "Clean, fast code. Mobile ready. Built for search. Every integration tested thoroughly before launch." },
-  { num: "04", title: "Launch", desc: "We handle domain, hosting, and going live. Delivered on a global network — fast anywhere in the world." },
+  { num: "04", title: "Launch", desc: "We handle domain, hosting, and going live. Delivered on a global network, fast anywhere in the world." },
   { num: "05", title: "Support", desc: "You are not on your own after launch. We are available for updates, changes, and growing your presence further." },
 ];
 
@@ -15,95 +15,205 @@ export default function Process() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="process" className="py-32 bg-[var(--cream2)]" ref={ref}>
+    <section id="process" ref={ref} style={{ padding: "7rem 0", background: "var(--cream2)" }}>
+      <style>{`
+        .kd-process-step {
+          display: flex;
+          gap: 2rem;
+          align-items: flex-start;
+          margin-bottom: 0.625rem;
+        }
+        .kd-process-circle {
+          flex-shrink: 0;
+          width: 2.75rem;
+          height: 2.75rem;
+          border-radius: 50%;
+          border: 2px solid rgba(45,106,79,0.15);
+          background: var(--cream2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10;
+          transition: border-color 0.3s ease, background 0.3s ease;
+        }
+        .kd-process-step:hover .kd-process-circle {
+          border-color: var(--green);
+          background: var(--green);
+        }
+        .kd-process-circle-num {
+          font-family: var(--font-sans);
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: var(--muted);
+          transition: color 0.3s ease;
+        }
+        .kd-process-step:hover .kd-process-circle-num { color: var(--cream); }
+        .kd-process-card {
+          flex: 1;
+          background: var(--cream);
+          border-radius: 1.125rem;
+          padding: 1.5rem;
+          border: 1px solid rgba(45,106,79,0.1);
+          transition: box-shadow 0.3s ease;
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 1rem;
+          margin-bottom: 0.125rem;
+        }
+        .kd-process-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .kd-process-ghost {
+          font-family: var(--font-serif);
+          font-size: 3.5rem;
+          color: rgba(45,106,79,0.07);
+          line-height: 1;
+          flex-shrink: 0;
+          user-select: none;
+        }
+        @media (max-width: 767px) {
+          .kd-process-circle { display: none !important; }
+          .kd-process-line { display: none !important; }
+          .kd-process-step { gap: 0; }
+        }
+      `}</style>
+
       <div className="kd-container">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20">
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "1.5rem", marginBottom: "4rem", flexWrap: "wrap" }}>
           <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              className="text-xs font-semibold tracking-[4px] uppercase text-[var(--green)] mb-4"
-              style={{ fontFamily: "'Outfit', sans-serif" }}
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                letterSpacing: "4px",
+                textTransform: "uppercase",
+                color: "var(--green)",
+                marginBottom: "1.25rem",
+              }}
             >
               How It Works
-            </motion.div>
+            </motion.p>
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.1 }}
-              className="text-[clamp(2.2rem,4vw,3.5rem)] text-[var(--dark)]"
-              style={{ fontFamily: "'DM Serif Display', serif", letterSpacing: "-0.02em" }}
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
+                color: "var(--dark)",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                margin: 0,
+              }}
             >
               From brief to live<br />in 14 days.
             </motion.h2>
           </div>
+
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.85 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.3 }}
-            className="flex-shrink-0 w-20 h-20 rounded-2xl bg-[var(--green)] flex items-center justify-center"
+            style={{
+              width: "5rem",
+              height: "5rem",
+              borderRadius: "1.125rem",
+              background: "var(--green)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
           >
-            <span className="text-3xl text-[var(--cream)]" style={{ fontFamily: "'DM Serif Display', serif" }}>14</span>
+            <span style={{ fontFamily: "var(--font-serif)", fontSize: "2rem", color: "var(--cream)" }}>14</span>
           </motion.div>
         </div>
 
-        {/* Steps */}
-        <div className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-[22px] top-0 bottom-0 w-px bg-[var(--border)] hidden md:block" />
+        {/* Steps with vertical line */}
+        <div style={{ position: "relative" }}>
+          {/* Background line */}
+          <div
+            className="kd-process-line"
+            style={{
+              position: "absolute",
+              left: "1.3125rem",
+              top: 0,
+              bottom: 0,
+              width: "1px",
+              background: "rgba(45,106,79,0.12)",
+            }}
+          />
+          {/* Animated foreground line */}
           <motion.div
+            className="kd-process-line"
             initial={{ scaleY: 0 }}
             animate={inView ? { scaleY: 1 } : {}}
-            transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
-            className="absolute left-[22px] top-0 bottom-0 w-px bg-[var(--green)] hidden md:block origin-top"
+            transition={{ duration: 1.6, ease: "easeOut", delay: 0.4 }}
+            style={{
+              position: "absolute",
+              left: "1.3125rem",
+              top: 0,
+              bottom: 0,
+              width: "1px",
+              background: "var(--green)",
+              transformOrigin: "top",
+            }}
           />
 
-          <div className="space-y-2">
-            {steps.map((step, i) => (
-              <motion.div
-                key={step.num}
-                initial={{ opacity: 0, x: -30 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2 + i * 0.12 }}
-                className="flex gap-8 md:gap-12 items-start group"
-              >
-                {/* Circle */}
-                <div className="flex-shrink-0 w-11 h-11 rounded-full border-2 border-[var(--border)] bg-[var(--cream2)] flex items-center justify-center z-10 group-hover:border-[var(--green)] group-hover:bg-[var(--green)] transition-all duration-300 hidden md:flex">
-                  <span
-                    className="text-[var(--muted)] text-xs font-bold group-hover:text-[var(--cream)] transition-colors"
-                    style={{ fontFamily: "'Outfit', sans-serif" }}
-                  >
-                    {i + 1}
-                  </span>
-                </div>
+          {steps.map((step, i) => (
+            <motion.div
+              key={step.num}
+              className="kd-process-step"
+              initial={{ opacity: 0, x: -24 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.55, delay: 0.25 + i * 0.12 }}
+            >
+              {/* Circle */}
+              <div className="kd-process-circle">
+                <span className="kd-process-circle-num">{i + 1}</span>
+              </div>
 
-                {/* Content */}
-                <div className="flex-1 bg-[var(--cream)] rounded-2xl p-6 mb-2 hover:shadow-md transition-shadow duration-300 border border-[var(--border)]">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="text-[10px] text-[var(--green)] font-bold tracking-[3px] uppercase mb-2" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                        Step {step.num}
-                      </div>
-                      <h3 className="text-xl text-[var(--dark)] mb-2" style={{ fontFamily: "'DM Serif Display', serif" }}>
-                        {step.title}
-                      </h3>
-                      <p className="text-[var(--muted)] text-sm leading-relaxed" style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}>
-                        {step.desc}
-                      </p>
-                    </div>
-                    <span
-                      className="text-[3rem] text-[var(--green)]/10 font-normal flex-shrink-0 leading-none"
-                      style={{ fontFamily: "'DM Serif Display', serif" }}
-                    >
-                      {step.num}
-                    </span>
-                  </div>
+              {/* Card */}
+              <div className="kd-process-card">
+                <div>
+                  <p style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.6rem",
+                    fontWeight: 700,
+                    letterSpacing: "3px",
+                    textTransform: "uppercase",
+                    color: "var(--green)",
+                    marginBottom: "0.5rem",
+                  }}>
+                    Step {step.num}
+                  </p>
+                  <h3 style={{
+                    fontFamily: "var(--font-serif)",
+                    fontSize: "1.25rem",
+                    color: "var(--dark)",
+                    marginBottom: "0.5rem",
+                  }}>
+                    {step.title}
+                  </h3>
+                  <p style={{
+                    fontFamily: "var(--font-sans)",
+                    fontWeight: 300,
+                    fontSize: "0.875rem",
+                    lineHeight: 1.65,
+                    color: "var(--muted)",
+                    margin: 0,
+                  }}>
+                    {step.desc}
+                  </p>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+                <span className="kd-process-ghost">{step.num}</span>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -7,8 +7,18 @@ export default function Cursor() {
   const pos = useRef({ x: 0, y: 0 });
   const ringPos = useRef({ x: 0, y: 0 });
   const rafRef = useRef<number>(0);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    // Detect touch device — if touch, hide cursor entirely
+    const checkTouch = () => {
+      if (window.matchMedia("(pointer: coarse)").matches) {
+        setIsTouch(true);
+        return;
+      }
+    };
+    checkTouch();
+
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
@@ -58,6 +68,15 @@ export default function Cursor() {
       cancelAnimationFrame(rafRef.current);
     };
   }, []);
+
+  // On touch devices, render nothing and restore default cursor
+  if (isTouch) {
+    return (
+      <style>{`
+        *, *::before, *::after { cursor: auto !important; }
+      `}</style>
+    );
+  }
 
   return (
     <>

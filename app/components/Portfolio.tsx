@@ -1,7 +1,6 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import Link from "next/link";
 
 const projects = [
   { tag: "Fashion · Web Design", title: "Shevans Luxury Streetwear", desc: "Premium streetwear brand site with immersive product showcase and mobile-optimised shopping experience.", url: "https://shevans.kleinhansdigital.co.za", bg: "#0a0a0a", accent: "#00d4ff" },
@@ -15,110 +14,202 @@ const projects = [
 export default function Portfolio() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <section id="work" className="py-32 bg-[var(--dark2)]" ref={ref}>
+    <section id="work" ref={ref} style={{ padding: "7rem 0", background: "var(--dark2)" }}>
+      <style>{`
+        .kd-port-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.5rem;
+          padding: 1.5rem 0;
+          border-bottom: 1px solid rgba(245,244,239,0.05);
+          text-decoration: none;
+          transition: padding-left 0.4s ease;
+        }
+        .kd-port-row:hover { padding-left: 1rem; }
+        .kd-port-num {
+          font-family: var(--font-sans);
+          font-size: 0.8125rem;
+          color: rgba(245,244,239,0.12);
+          width: 2rem;
+          flex-shrink: 0;
+          transition: color 0.3s ease;
+          font-variant-numeric: tabular-nums;
+        }
+        .kd-port-row:hover .kd-port-num { color: var(--green3); }
+        .kd-port-tag {
+          font-family: var(--font-sans);
+          font-size: 0.625rem;
+          color: rgba(245,244,239,0.28);
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          margin-bottom: 0.25rem;
+        }
+        .kd-port-title {
+          font-family: var(--font-serif);
+          font-size: 1.25rem;
+          color: var(--cream);
+          transition: color 0.3s ease;
+          margin: 0;
+        }
+        .kd-port-row:hover .kd-port-title { color: var(--green3); }
+        .kd-port-desc {
+          font-family: var(--font-sans);
+          font-weight: 300;
+          font-size: 0.8125rem;
+          line-height: 1.6;
+          color: rgba(245,244,239,0.28);
+          max-width: 20rem;
+          flex-shrink: 0;
+          transition: color 0.3s ease;
+        }
+        .kd-port-row:hover .kd-port-desc { color: rgba(245,244,239,0.48); }
+        .kd-port-arrow {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 50%;
+          border: 1px solid rgba(245,244,239,0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          transition: border-color 0.3s ease, background 0.3s ease;
+        }
+        .kd-port-row:hover .kd-port-arrow {
+          border-color: var(--green3);
+          background: rgba(45,106,79,0.12);
+        }
+        .kd-port-arrow svg {
+          color: rgba(245,244,239,0.28);
+          transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .kd-port-row:hover .kd-port-arrow svg {
+          color: var(--green3);
+          transform: translate(2px, -2px);
+        }
+        .kd-port-swatch {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 0.75rem;
+          flex-shrink: 0;
+          transition: transform 0.4s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .kd-port-row:hover .kd-port-swatch { transform: scale(1.12); }
+        .kd-port-desc-col { display: block; }
+        @media (max-width: 1023px) {
+          .kd-port-desc-col { display: none !important; }
+        }
+        @media (max-width: 639px) {
+          .kd-port-title { font-size: 1.0625rem; }
+        }
+      `}</style>
+
       <div className="kd-container">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "1.5rem", marginBottom: "3.5rem", flexWrap: "wrap" }}>
           <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              className="text-xs font-semibold tracking-[4px] uppercase text-[var(--green3)] mb-4"
-              style={{ fontFamily: "'Outfit', sans-serif" }}
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                letterSpacing: "4px",
+                textTransform: "uppercase",
+                color: "var(--green3)",
+                marginBottom: "1.25rem",
+              }}
             >
               Our Work
-            </motion.div>
+            </motion.p>
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.1 }}
-              className="text-[clamp(2.2rem,4vw,3.5rem)] text-[var(--cream)]"
-              style={{ fontFamily: "'DM Serif Display', serif", letterSpacing: "-0.02em" }}
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
+                color: "var(--cream)",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                margin: 0,
+              }}
             >
               Projects we are<br />proud of.
             </motion.h2>
           </div>
+
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2 }}
-            className="text-[var(--cream)]/40 max-w-xs text-sm leading-relaxed"
-            style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontWeight: 300,
+              fontSize: "0.875rem",
+              lineHeight: 1.7,
+              color: "rgba(245,244,239,0.38)",
+              maxWidth: "18rem",
+              margin: 0,
+            }}
           >
             Businesses taken from no online presence to a digital home they are proud to share.
           </motion.p>
         </div>
 
-        {/* Project list */}
-        <div className="space-y-px">
+        {/* Project rows */}
+        <div>
           {projects.map((project, i) => (
-            <motion.div
+            <motion.a
               key={project.title}
-              initial={{ opacity: 0, y: 30 }}
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="kd-port-row"
+              initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 + i * 0.08 }}
+              transition={{ duration: 0.55, delay: 0.1 + i * 0.08 }}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
             >
-              <Link
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="port-card group flex items-center justify-between gap-6 py-6 border-b border-[var(--cream)]/5 hover:pl-4 transition-all duration-500"
-                onMouseEnter={() => setHoveredIndex(i)}
-                onMouseLeave={() => setHoveredIndex(null)}
+              {/* Number */}
+              <span className="kd-port-num">0{i + 1}</span>
+
+              {/* Swatch */}
+              <div
+                className="kd-port-swatch"
+                style={{
+                  background: project.bg,
+                  boxShadow: hovered === i ? `0 0 18px ${project.accent}35` : "none",
+                }}
               >
-                <div className="flex items-center gap-6 flex-1 min-w-0">
-                  {/* Number */}
-                  <span
-                    className="text-[var(--cream)]/15 text-sm font-mono w-8 flex-shrink-0 group-hover:text-[var(--green3)] transition-colors duration-300"
-                    style={{ fontFamily: "'Outfit', sans-serif" }}
-                  >
-                    0{i + 1}
-                  </span>
+                <div style={{ width: "0.5rem", height: "0.5rem", borderRadius: "50%", background: project.accent }} />
+              </div>
 
-                  {/* Color swatch */}
-                  <div
-                    className="w-10 h-10 rounded-xl flex-shrink-0 transition-all duration-500 group-hover:scale-110"
-                    style={{ background: project.bg, boxShadow: hoveredIndex === i ? `0 0 20px ${project.accent}30` : "none" }}
-                  >
-                    <div className="w-full h-full rounded-xl flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full" style={{ background: project.accent }} />
-                    </div>
-                  </div>
+              {/* Text */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p className="kd-port-tag">{project.tag}</p>
+                <h3 className="kd-port-title">{project.title}</h3>
+              </div>
 
-                  {/* Text */}
-                  <div className="min-w-0">
-                    <div className="text-[10px] text-[var(--cream)]/30 tracking-[3px] uppercase mb-1" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                      {project.tag}
-                    </div>
-                    <h3
-                      className="text-[var(--cream)] text-lg font-normal group-hover:text-[var(--green3)] transition-colors duration-300 truncate"
-                      style={{ fontFamily: "'DM Serif Display', serif" }}
-                    >
-                      {project.title}
-                    </h3>
-                  </div>
-                </div>
+              {/* Description — hidden on tablet/mobile */}
+              <p className="kd-port-desc kd-port-desc-col">{project.desc}</p>
 
-                {/* Description — hidden on small, shown on hover */}
-                <p
-                  className="hidden lg:block text-[var(--cream)]/30 text-sm max-w-xs leading-relaxed flex-shrink-0 group-hover:text-[var(--cream)]/50 transition-colors duration-300"
-                  style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
-                >
-                  {project.desc}
-                </p>
-
-                {/* Arrow */}
-                <div className="flex-shrink-0 w-10 h-10 rounded-full border border-[var(--cream)]/10 flex items-center justify-center group-hover:border-[var(--green3)] group-hover:bg-[var(--green)]/10 transition-all duration-300">
-                  <svg className="w-4 h-4 text-[var(--cream)]/30 group-hover:text-[var(--green3)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 17L17 7M17 7H7M17 7v10" />
-                  </svg>
-                </div>
-              </Link>
-            </motion.div>
+              {/* Arrow */}
+              <div className="kd-port-arrow">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </div>
+            </motion.a>
           ))}
         </div>
       </div>

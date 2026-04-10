@@ -128,8 +128,8 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
             style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginBottom: "2rem" }}
           >
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#3d7a5e" }} />
-            <span style={{ color: "#3d7a5e", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "4px", textTransform: "uppercase" }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#5dbf88" }} />
+            <span style={{ color: "#5dbf88", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "4px", textTransform: "uppercase" }}>
               South African Digital Agency
             </span>
           </motion.div>
@@ -145,7 +145,7 @@ export default function Hero() {
                   className="text-hero"
                   style={{
                     fontFamily: "'DM Serif Display', serif",
-                    color: word === "works." ? "#3d7a5e" : "#f5f4ef",
+                    color: word === "works." ? "#5dbf88" : "#f5f4ef",
                     fontStyle: word === "works." ? "italic" : "normal",
                     display: "block",
                   }}
@@ -180,13 +180,13 @@ export default function Hero() {
               href="#contact"
               style={{
                 display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                background: "#2d6a4f", color: "#f5f4ef",
+                background: "#3a8a62", color: "#f5f4ef",
                 fontWeight: 600, padding: "0.875rem 1.75rem",
                 borderRadius: "9999px", fontSize: "0.875rem",
                 textDecoration: "none", transition: "background 0.2s ease",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#1f4d39")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#2d6a4f")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#2a6647")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#3a8a62")}
             >
               Start a Project
               <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -223,7 +223,7 @@ export default function Hero() {
                 flex: "1 1 120px", padding: "1rem 1.5rem",
                 borderLeft: i > 0 ? "1px solid rgba(45,106,79,0.15)" : "none",
               }}>
-                <div className="text-stat" style={{ fontFamily: "'DM Serif Display', serif", color: "#3d7a5e" }}>
+                <div className="text-stat" style={{ fontFamily: "'DM Serif Display', serif", color: "#5dbf88" }}>
                   {stat.num}
                 </div>
                 <div style={{ color: "rgba(245,244,239,0.4)", fontSize: "0.75rem", marginTop: "0.25rem" }}>

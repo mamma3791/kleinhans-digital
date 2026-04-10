@@ -1,75 +1,145 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import Link from "next/link";
 
 export default function CTA() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="py-24 bg-[var(--cream)]" ref={ref}>
+    <section ref={ref} style={{ padding: "6rem 0", background: "var(--cream)" }}>
+      <style>{`
+        .kd-cta-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: var(--green);
+          color: var(--cream);
+          font-family: var(--font-sans);
+          font-size: 0.875rem;
+          font-weight: 600;
+          padding: 1rem 2rem;
+          border-radius: 9999px;
+          text-decoration: none;
+          transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .kd-cta-primary:hover {
+          background: var(--green2);
+          transform: scale(1.02);
+          box-shadow: 0 12px 32px rgba(45,106,79,0.25);
+        }
+        .kd-cta-secondary {
+          display: inline-flex;
+          align-items: center;
+          color: rgba(245,244,239,0.55);
+          font-family: var(--font-sans);
+          font-size: 0.875rem;
+          font-weight: 600;
+          padding: 1rem 2rem;
+          border-radius: 9999px;
+          border: 1px solid rgba(245,244,239,0.14);
+          text-decoration: none;
+          transition: border-color 0.25s ease, color 0.25s ease;
+        }
+        .kd-cta-secondary:hover {
+          border-color: rgba(245,244,239,0.3);
+          color: var(--cream);
+        }
+      `}</style>
+
       <div className="kd-container">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 32 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="relative noise-overlay bg-[var(--dark)] rounded-3xl overflow-hidden px-8 md:px-16 py-16 md:py-20 text-center"
+          transition={{ duration: 0.75 }}
+          style={{
+            position: "relative",
+            background: "var(--dark)",
+            borderRadius: "1.75rem",
+            overflow: "hidden",
+            padding: "5rem 2rem",
+            textAlign: "center",
+          }}
         >
-          {/* Glow */}
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(45,106,79,0.15) 0%, transparent 70%)" }} />
+          {/* Noise texture */}
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none",
+            backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")",
+            opacity: 0.4, zIndex: 0,
+          }} />
 
-          <div className="relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+          {/* Glow */}
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+            background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(45,106,79,0.16) 0%, transparent 70%)",
+          }} />
+
+          <div style={{ position: "relative", zIndex: 10 }}>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2 }}
-              className="text-xs font-semibold tracking-[4px] uppercase text-[var(--green3)] mb-6"
-              style={{ fontFamily: "'Outfit', sans-serif" }}
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                letterSpacing: "4px",
+                textTransform: "uppercase",
+                color: "var(--green3)",
+                marginBottom: "1.5rem",
+              }}
             >
               Ready to grow?
-            </motion.div>
+            </motion.p>
+
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.3 }}
-              className="text-[clamp(2rem,5vw,4rem)] text-[var(--cream)] mb-6 leading-tight"
-              style={{ fontFamily: "'DM Serif Display', serif", letterSpacing: "-0.02em" }}
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(2rem, 5vw, 4rem)",
+                color: "var(--cream)",
+                marginBottom: "1.5rem",
+                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+              }}
             >
               Your business deserves<br />a website that <em>works.</em>
             </motion.h2>
+
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.4 }}
-              className="text-[var(--cream)]/40 text-base max-w-md mx-auto mb-10 leading-relaxed"
-              style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontWeight: 300,
+                fontSize: "1rem",
+                lineHeight: 1.7,
+                color: "rgba(245,244,239,0.38)",
+                maxWidth: "28rem",
+                margin: "0 auto 2.5rem",
+              }}
             >
               From R6,500 once-off. Live in 14 days. Johannesburg based, available across South Africa.
             </motion.p>
+
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.5 }}
-              className="flex flex-wrap gap-4 justify-center"
+              style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "center" }}
             >
-              <Link
-                href="#contact"
-                className="inline-flex items-center gap-2 bg-[var(--green)] hover:bg-[var(--green2)] text-[var(--cream)] font-semibold px-8 py-4 rounded-full text-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-[var(--green)]/20"
-                style={{ fontFamily: "'Outfit', sans-serif" }}
-              >
+              <a href="#contact" className="kd-cta-primary">
                 Start a Project Today
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </Link>
-              <Link
-                href="#work"
-                className="inline-flex items-center border border-[var(--cream)]/15 hover:border-[var(--cream)]/30 text-[var(--cream)]/60 hover:text-[var(--cream)] font-semibold px-8 py-4 rounded-full text-sm transition-all duration-300"
-                style={{ fontFamily: "'Outfit', sans-serif" }}
-              >
+              </a>
+              <a href="#work" className="kd-cta-secondary">
                 View Our Work
-              </Link>
+              </a>
             </motion.div>
           </div>
         </motion.div>
