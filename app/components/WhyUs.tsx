@@ -14,29 +14,22 @@ export default function WhyUs() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} style={{ padding: "7rem 0", background: "var(--dark)" }}>
+    <section ref={ref} style={{ padding: "5rem 0 4rem", background: "var(--dark)" }}>
       <style>{`
         .kd-why-card {
-          border: 1px solid rgba(245,244,239,0.06);
+          border: 1px solid rgba(245,244,239,0.07);
           border-radius: 1rem;
-          padding: 1.5rem;
-          transition: background 0.35s ease, border-color 0.35s ease;
-          margin-bottom: 0.625rem;
+          padding: 1.5rem 1.75rem;
+          transition: background 0.3s ease, border-color 0.3s ease;
+          margin-bottom: 0.75rem;
         }
+        .kd-why-card:last-child { margin-bottom: 0; }
         .kd-why-card:hover {
-          background: rgba(245,244,239,0.03);
-          border-color: rgba(45,106,79,0.22);
+          background: rgba(245,244,239,0.04);
+          border-color: rgba(93,191,136,0.25);
         }
-        .kd-why-card:hover .kd-why-num {
-          color: rgba(45,106,79,0.45);
-        }
-        .kd-why-card:hover .kd-why-title {
-          color: var(--green3);
-        }
-        .kd-why-left {
-          position: sticky;
-          top: 8rem;
-        }
+        .kd-why-card:hover .kd-why-num { color: rgba(93,191,136,0.55); }
+        .kd-why-card:hover .kd-why-title { color: var(--green3); }
         .kd-why-cta {
           display: inline-flex;
           align-items: center;
@@ -51,28 +44,23 @@ export default function WhyUs() {
           text-decoration: none;
           transition: background 0.25s ease, transform 0.25s ease;
         }
-        .kd-why-cta:hover {
-          background: var(--green2);
-          transform: scale(1.02);
+        .kd-why-cta:hover { background: var(--green2); transform: scale(1.02); }
+        .kd-why-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 5rem;
+          align-items: center;
         }
         @media (max-width: 1023px) {
-          .kd-why-left { position: static; }
           .kd-why-grid { grid-template-columns: 1fr !important; gap: 3rem !important; }
         }
       `}</style>
 
       <div className="kd-container">
-        <div
-          className="kd-why-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "5rem",
-            alignItems: "start",
-          }}
-        >
-          {/* Left sticky */}
-          <div className="kd-why-left">
+        <div className="kd-why-grid">
+
+          {/* Left — no sticky, centered vertically */}
+          <div>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -95,10 +83,10 @@ export default function WhyUs() {
               transition={{ delay: 0.1 }}
               style={{
                 fontFamily: "var(--font-serif)",
-                fontSize: "clamp(2.2rem, 4vw, 3.8rem)",
+                fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
                 color: "var(--cream)",
-                marginBottom: "1.75rem",
-                lineHeight: 1.05,
+                marginBottom: "1.5rem",
+                lineHeight: 1.1,
                 letterSpacing: "-0.02em",
               }}
             >
@@ -114,9 +102,8 @@ export default function WhyUs() {
                 fontWeight: 300,
                 fontSize: "0.95rem",
                 lineHeight: 1.75,
-                color: "rgba(245,244,239,0.38)",
-                marginBottom: "2.5rem",
-                maxWidth: "28rem",
+                color: "rgba(245,244,239,0.45)",
+                marginBottom: "2.25rem",
               }}
             >
               Most web design businesses use templates and call it custom. We do not. That difference shows in how the site looks, how fast it loads, and how many enquiries it generates.
@@ -151,12 +138,12 @@ export default function WhyUs() {
                     className="kd-why-num"
                     style={{
                       fontFamily: "var(--font-serif)",
-                      fontSize: "2rem",
-                      color: "rgba(45,106,79,0.18)",
+                      fontSize: "1.875rem",
+                      color: "rgba(93,191,136,0.35)",
                       flexShrink: 0,
                       lineHeight: 1,
                       marginTop: "0.125rem",
-                      transition: "color 0.35s ease",
+                      transition: "color 0.3s ease",
                     }}
                   >
                     {r.num}
@@ -169,7 +156,7 @@ export default function WhyUs() {
                         fontSize: "1.125rem",
                         color: "var(--cream)",
                         marginBottom: "0.5rem",
-                        transition: "color 0.35s ease",
+                        transition: "color 0.3s ease",
                       }}
                     >
                       {r.title}
@@ -178,8 +165,8 @@ export default function WhyUs() {
                       fontFamily: "var(--font-sans)",
                       fontWeight: 300,
                       fontSize: "0.875rem",
-                      lineHeight: 1.65,
-                      color: "rgba(245,244,239,0.38)",
+                      lineHeight: 1.7,
+                      color: "rgba(245,244,239,0.48)",
                       margin: 0,
                     }}>
                       {r.desc}
