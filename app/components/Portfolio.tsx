@@ -8,7 +8,7 @@ const projects = [
   { tag: "E-Commerce · Branding", title: "Drip King", desc: "Fully featured online store with product catalogue, shopping cart, and brand identity built for the right market.", url: "https://dripking.kleinhansdigital.co.za", bg: "#0d0d0d", accent: "#e85d04" },
   { tag: "Retail · Web Design + SEO", title: "Bok Ballas Vapes", desc: "Striking retail site with product showcase, location finder, and local SEO to drive walk-in traffic.", url: "https://bokballas.kleinhansdigital.co.za", bg: "#0a1a0f", accent: "#4caf50" },
   { tag: "Hospitality · Web Design", title: "De Kleine Kaap Guest House", desc: "Cape Dutch guest house with WhatsApp booking integration, lightbox gallery, and mobile-first design for Lady Grey.", url: "https://de-kleine-kaap.kleinhansdigital.co.za", bg: "#1a1209", accent: "#d4a853" },
-  { tag: "Pet Services · Web Design", title: "Jess's Pet Sitting", desc: "Warm, trust-building website for a professional pet sitting service. Easy to navigate, easy to contact, easy to book.", url: "https://jess.kleinhansdigital.co.za", bg: "#1a0f14", accent: "#ff85a1" },
+  { tag: "Pet Services · Web Design", title: "Jess's Pet Sitting", desc: "A warm, professional website for a pet sitting service built to reassure pet owners and make booking effortless.", url: "https://jess.kleinhansdigital.co.za", bg: "#1a0f14", accent: "#ff85a1" },
 ];
 
 export default function Portfolio() {
@@ -17,7 +17,7 @@ export default function Portfolio() {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <section id="work" ref={ref} style={{ padding: "7rem 0", background: "var(--dark2)" }}>
+    <section id="work" ref={ref} style={{ padding: "7rem 0", background: "var(--dark)" }}>
       <style>{`
         .kd-port-row {
           display: flex;

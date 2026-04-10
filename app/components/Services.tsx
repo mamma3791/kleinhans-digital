@@ -331,7 +331,7 @@ export default function Services() {
           {[
             { num: "14", label: "Days average delivery" },
             { num: "100%", label: "Custom built every time" },
-            { num: "R0", label: "Monthly template cost" },
+            { num: "R650", label: "Monthly retainer from" },
             { num: "6+", label: "Sites launched" },
           ].map((s, i) => (
             <div key={i} style={{ background: "var(--cream)", padding: "1.375rem 1rem", textAlign: "center" }}>
