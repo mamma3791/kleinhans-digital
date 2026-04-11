@@ -71,10 +71,6 @@ function ConfigureContent() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
-      // Auto-submit if returning from login with selections
-      if (user && autosubmit && initialAddons.length > 0) {
-        setTimeout(() => handleAutoSubmit(user), 500);
-      }
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
@@ -141,6 +137,14 @@ function ConfigureContent() {
     }
     setSubmitting(false);
   };
+
+  // Trigger auto-submit once user loads, if returning from login with saved selections
+  useEffect(() => {
+    if (user && autosubmit && initialAddons.length > 0) {
+      const timer = setTimeout(() => { handleAutoSubmit(user); }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [user]);
 
   const { base, monthly, consultative } = calcPrice();
 
