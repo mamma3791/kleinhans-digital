@@ -58,7 +58,6 @@ function ConfigureContent() {
   const initialTier = searchParams.get("tier") || "starter";
   const initialAddons = searchParams.get("addons")?.split(",").filter(Boolean) || [];
   const initialMessage = searchParams.get("message") || "";
-  const autosubmit = searchParams.get("autosubmit") === "1";
 
   const [selectedTier, setSelectedTier] = useState(initialTier);
   const [selectedAddons, setSelectedAddons] = useState<string[]>(initialAddons);
@@ -104,47 +103,6 @@ function ConfigureContent() {
     });
     return { base, monthly, consultative };
   };
-
-  const handleAutoSubmit = async (loggedInUser: { id: string; email?: string; user_metadata?: { full_name?: string } }) => {
-    setSubmitting(true);
-    const { base, monthly, consultative } = calcPrice(initialTier, initialAddons);
-    const { error } = await supabase.from("quotes").insert({
-      user_id: loggedInUser.id,
-      tier: initialTier,
-      addons: initialAddons,
-      base_price: base,
-      monthly_price: monthly,
-      is_consultative: consultative,
-      message: initialMessage,
-      status: "submitted",
-    });
-    if (!error) {
-      await fetch(MAKE_WEBHOOK, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "quote_submitted",
-          user_email: loggedInUser.email,
-          user_name: loggedInUser.user_metadata?.full_name,
-          tier: initialTier,
-          addons: initialAddons,
-          base_price: consultative ? "Consultative" : `R${base.toLocaleString()}`,
-          monthly_price: `R${monthly.toLocaleString()}/mo`,
-          message: initialMessage,
-        }),
-      }).catch(() => {});
-      setSubmitted(true);
-    }
-    setSubmitting(false);
-  };
-
-  // Trigger auto-submit once user loads, if returning from login with saved selections
-  useEffect(() => {
-    if (user && autosubmit && initialAddons.length > 0) {
-      const timer = setTimeout(() => { handleAutoSubmit(user); }, 600);
-      return () => clearTimeout(timer);
-    }
-  }, [user]);
 
   const { base, monthly, consultative } = calcPrice();
 
