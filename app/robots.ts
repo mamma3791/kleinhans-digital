@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard", "/onboarding"],
+        disallow: ["/dashboard", "/onboarding", "/studio"],
       },
     ],
     sitemap: "https://kleinhansdigital.co.za/sitemap.xml",
