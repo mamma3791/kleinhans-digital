@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -14,14 +14,16 @@ const tiers = [
     monthly: 650,
     desc: "Get online professionally from day one.",
     features: ["Up to 5 pages", "Mobile first design", "WhatsApp integration", "Contact form", "Google My Business setup", "SSL and hosting", "Basic SEO"],
+    includedAddons: [] as string[],
   },
   {
     id: "growth",
     name: "Growth",
     basePrice: 12000,
     monthly: 1200,
-    desc: "Generate leads and track performance.",
+    desc: "Generate leads and track your performance.",
     features: ["Everything in Starter", "Social media integration", "Lead capture forms", "Google Analytics", "Looker Studio dashboard", "SEO reporting", "2 revisions/month"],
+    includedAddons: ["seo_reporting", "lead_funnel"] as string[],
   },
   {
     id: "pro",
@@ -29,18 +31,23 @@ const tiers = [
     basePrice: 22000,
     monthly: 2200,
     desc: "Full digital presence with automation.",
-    features: ["Everything in Growth", "Full lead funnel", "Google Ads management", "WhatsApp automation", "E-commerce", "Monthly strategy call", "Priority turnaround"],
+    features: ["Everything in Growth", "Full lead funnel", "WhatsApp automation", "E-commerce", "Monthly strategy call", "Priority turnaround"],
+    includedAddons: ["seo_reporting", "lead_funnel", "ecommerce", "whatsapp_bot"] as string[],
   },
 ];
 
 const addons = [
   { id: "extra_pages", label: "Additional pages (per 5)", price: 2000, consultative: false },
   { id: "ecommerce", label: "E-commerce store", price: 5000, consultative: false },
+  { id: "lead_funnel", label: "Lead funnel and landing page", price: 3000, consultative: false },
+  { id: "seo_reporting", label: "Monthly SEO reporting and updates", price: 800, consultative: false },
   { id: "branding", label: "Branding and logo design", price: 0, consultative: true },
   { id: "whatsapp_bot", label: "WhatsApp chatbot", price: 0, consultative: true },
-  { id: "google_ads", label: "Google Ads setup and management", price: 2000, consultative: false },
+  { id: "google_ads", label: "Google Ads management", price: 0, consultative: true },
   { id: "photography", label: "Product or business photography", price: 0, consultative: true },
   { id: "multilocation", label: "Multi-location or franchise site", price: 0, consultative: true },
+  { id: "copywriting", label: "Professional copywriting", price: 0, consultative: true },
+  { id: "maintenance", label: "Ongoing maintenance and support retainer", price: 0, consultative: true },
 ];
 
 function ConfigureContent() {
@@ -66,13 +73,24 @@ function ConfigureContent() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Auto-select included addons when tier changes
+  useEffect(() => {
+    const tier = tiers.find(t => t.id === selectedTier);
+    if (tier) {
+      setSelectedAddons(tier.includedAddons);
+    }
+  }, [selectedTier]);
+
   const tier = tiers.find(t => t.id === selectedTier) || tiers[0];
+
+  const isIncluded = (id: string) => tier.includedAddons.includes(id);
 
   const calcPrice = () => {
     let base = tier.basePrice;
-    let monthly = tier.monthly;
+    const monthly = tier.monthly;
     let consultative = false;
     selectedAddons.forEach(id => {
+      if (isIncluded(id)) return; // already in tier price
       const addon = addons.find(a => a.id === id);
       if (addon) {
         if (addon.consultative) { consultative = true; }
@@ -85,6 +103,7 @@ function ConfigureContent() {
   const { base, monthly, consultative } = calcPrice();
 
   const toggleAddon = (id: string) => {
+    if (isIncluded(id)) return; // can't deselect included addons
     setSelectedAddons(prev =>
       prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
     );
@@ -93,7 +112,6 @@ function ConfigureContent() {
   const handleSubmit = async () => {
     if (!user) { setShowLogin(true); return; }
     setSubmitting(true);
-
     const { base, monthly, consultative } = calcPrice();
 
     const { error } = await supabase.from("quotes").insert({
@@ -149,9 +167,9 @@ function ConfigureContent() {
           <p style={{ fontFamily: "var(--font-sans)", color: "var(--muted)", lineHeight: 1.7, marginBottom: "2rem" }}>
             We will review your brief and be in touch within 24 hours to discuss next steps.
           </p>
-          <a href="/dashboard" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "var(--green)", color: "var(--cream)", fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.875rem", padding: "0.875rem 1.75rem", borderRadius: "9999px", textDecoration: "none" }}>
+          <Link href="/dashboard" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "var(--green)", color: "var(--cream)", fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.875rem", padding: "0.875rem 1.75rem", borderRadius: "9999px", textDecoration: "none" }}>
             Go to your dashboard
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -168,6 +186,7 @@ function ConfigureContent() {
           transition: all 0.2s ease;
           background: var(--cream);
           text-align: left;
+          width: 100%;
         }
         .kd-cfg-tier:hover { border-color: var(--green); }
         .kd-cfg-tier.active { border-color: var(--green); background: rgba(58,138,98,0.05); }
@@ -178,13 +197,15 @@ function ConfigureContent() {
           padding: 0.875rem 1rem;
           border: 1px solid rgba(45,106,79,0.12);
           border-radius: 0.75rem;
-          cursor: pointer;
           transition: all 0.2s ease;
           background: var(--cream);
           margin-bottom: 0.5rem;
+          width: 100%;
         }
-        .kd-cfg-addon:hover { border-color: var(--green); background: rgba(58,138,98,0.03); }
+        .kd-cfg-addon.selectable { cursor: pointer; }
+        .kd-cfg-addon.selectable:hover { border-color: var(--green); background: rgba(58,138,98,0.03); }
         .kd-cfg-addon.active { border-color: var(--green); background: rgba(58,138,98,0.06); }
+        .kd-cfg-addon.included { border-color: rgba(58,138,98,0.3); background: rgba(58,138,98,0.04); opacity: 0.8; cursor: default; }
         .kd-cfg-check {
           width: 1.25rem;
           height: 1.25rem;
@@ -196,7 +217,8 @@ function ConfigureContent() {
           justify-content: center;
           transition: all 0.2s ease;
         }
-        .kd-cfg-addon.active .kd-cfg-check {
+        .kd-cfg-addon.active .kd-cfg-check,
+        .kd-cfg-addon.included .kd-cfg-check {
           background: var(--green);
           border-color: var(--green);
         }
@@ -216,14 +238,10 @@ function ConfigureContent() {
         .kd-cfg-submit:hover { background: var(--green2); }
         .kd-cfg-submit:disabled { opacity: 0.6; cursor: default; }
         .kd-login-overlay {
-          position: fixed;
-          inset: 0;
+          position: fixed; inset: 0;
           background: rgba(15,28,21,0.7);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 100;
-          padding: 1.5rem;
+          display: flex; align-items: center; justify-content: center;
+          z-index: 100; padding: 1.5rem;
           backdrop-filter: blur(4px);
         }
         .kd-login-card {
@@ -235,10 +253,7 @@ function ConfigureContent() {
           text-align: center;
         }
         .kd-google-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.75rem;
+          display: flex; align-items: center; justify-content: center; gap: 0.75rem;
           width: 100%;
           background: #fff;
           border: 1.5px solid rgba(26,36,32,0.15);
@@ -255,6 +270,10 @@ function ConfigureContent() {
         .kd-google-btn:hover { border-color: var(--green); box-shadow: 0 2px 12px rgba(58,138,98,0.12); }
         @media (max-width: 1023px) {
           .kd-cfg-layout { grid-template-columns: 1fr !important; }
+          .kd-cfg-sticky { position: static !important; }
+        }
+        @media (max-width: 639px) {
+          .kd-cfg-tiers { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
@@ -272,10 +291,7 @@ function ConfigureContent() {
           </span>
         </Link>
         {user ? (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--muted)" }}>{user.email}</span>
-            <a href="/dashboard" style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 600, color: "var(--green)", textDecoration: "none" }}>Dashboard</a>
-          </div>
+          <Link href="/dashboard" style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 600, color: "var(--green)", textDecoration: "none" }}>Dashboard</Link>
         ) : (
           <button onClick={() => setShowLogin(true)} style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 600, color: "var(--green)", background: "none", border: "none", cursor: "pointer" }}>
             Sign in
@@ -284,7 +300,6 @@ function ConfigureContent() {
       </nav>
 
       <div className="kd-container" style={{ padding: "3rem 1.5rem" }}>
-        {/* Header */}
         <div style={{ marginBottom: "3rem" }}>
           <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "4px", textTransform: "uppercase", color: "var(--green)", marginBottom: "0.75rem" }}>
             Build your quote
@@ -293,50 +308,63 @@ function ConfigureContent() {
             Configure your project.
           </h1>
           <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.975rem", color: "var(--muted)", lineHeight: 1.7 }}>
-            Select a base package and add any extras you need. Your price updates in real time.
+            Select a base package and add extras. Included features are pre-selected. Your price updates in real time.
           </p>
         </div>
 
         <div className="kd-cfg-layout" style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: "3rem", alignItems: "start" }}>
 
-          {/* Left — options */}
           <div>
             {/* Tier selection */}
             <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", color: "var(--muted)", marginBottom: "1rem" }}>
               1. Choose your base package
             </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.75rem", marginBottom: "2.5rem" }}>
+            <div className="kd-cfg-tiers" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.75rem", marginBottom: "2.5rem" }}>
               {tiers.map(t => (
                 <button key={t.id} className={`kd-cfg-tier${selectedTier === t.id ? " active" : ""}`} onClick={() => setSelectedTier(t.id)}>
                   <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", color: selectedTier === t.id ? "var(--green)" : "var(--muted)", marginBottom: "0.375rem" }}>
                     {selectedTier === t.id ? "Selected" : "Select"}
                   </div>
                   <div style={{ fontFamily: "var(--font-serif)", fontSize: "1.375rem", color: "var(--dark)", marginBottom: "0.25rem" }}>{t.name}</div>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "1.25rem", fontWeight: 600, color: "var(--green)", marginBottom: "0.375rem" }}>R{t.basePrice.toLocaleString()}</div>
+                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "1.125rem", fontWeight: 600, color: "var(--green)", marginBottom: "0.25rem" }}>R{t.basePrice.toLocaleString()}</div>
                   <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--muted)" }}>+ R{t.monthly.toLocaleString()}/mo</div>
                 </button>
               ))}
             </div>
 
             {/* Add-ons */}
-            <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", color: "var(--muted)", marginBottom: "1rem" }}>
-              2. Add extras (optional)
+            <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", color: "var(--muted)", marginBottom: "0.5rem" }}>
+              2. Add extras
             </h2>
-            {addons.map(addon => (
-              <button key={addon.id} className={`kd-cfg-addon${selectedAddons.includes(addon.id) ? " active" : ""}`} onClick={() => toggleAddon(addon.id)} style={{ width: "100%" }}>
-                <div className="kd-cfg-check">
-                  {selectedAddons.includes(addon.id) && (
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  )}
-                </div>
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "var(--dark)", flex: 1, textAlign: "left" }}>{addon.label}</span>
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", fontWeight: 600, color: addon.consultative ? "var(--muted)" : "var(--green)", flexShrink: 0 }}>
-                  {addon.consultative ? "Consultative" : `+R${addon.price.toLocaleString()}`}
-                </span>
-              </button>
-            ))}
+            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--muted)", marginBottom: "1rem" }}>
+              Ticked items are included in your selected package.
+            </p>
+            {addons.map(addon => {
+              const included = isIncluded(addon.id);
+              const active = selectedAddons.includes(addon.id);
+              return (
+                <button
+                  key={addon.id}
+                  className={`kd-cfg-addon${active ? " active" : ""}${included ? " included" : " selectable"}`}
+                  onClick={() => toggleAddon(addon.id)}
+                >
+                  <div className="kd-cfg-check">
+                    {active && (
+                      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </div>
+                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "var(--dark)", flex: 1, textAlign: "left" }}>
+                    {addon.label}
+                    {included && <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.7rem", color: "var(--green)", marginLeft: "0.5rem" }}>Included</span>}
+                  </span>
+                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", fontWeight: 600, color: addon.consultative ? "var(--muted)" : included ? "var(--green)" : "var(--green)", flexShrink: 0 }}>
+                    {addon.consultative ? "Consultative" : included ? "✓" : `+R${addon.price.toLocaleString()}`}
+                  </span>
+                </button>
+              );
+            })}
 
             {/* Message */}
             <div style={{ marginTop: "2rem" }}>
@@ -352,14 +380,13 @@ function ConfigureContent() {
             </div>
           </div>
 
-          {/* Right — summary */}
-          <div style={{ position: "sticky", top: "5rem" }}>
+          {/* Summary */}
+          <div className="kd-cfg-sticky" style={{ position: "sticky", top: "5rem" }}>
             <div style={{ background: "var(--dark)", borderRadius: "1.375rem", padding: "2rem", marginBottom: "1rem" }}>
               <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", color: "var(--green3)", marginBottom: "1.25rem" }}>
                 Your quote
               </p>
 
-              {/* Selected tier */}
               <div style={{ borderBottom: "1px solid rgba(245,244,239,0.08)", paddingBottom: "1rem", marginBottom: "1rem" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.125rem", color: "var(--cream)" }}>{tier.name}</span>
@@ -368,10 +395,10 @@ function ConfigureContent() {
                 <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.4)" }}>Base package</span>
               </div>
 
-              {/* Selected addons */}
-              {selectedAddons.length > 0 && (
+              {/* Extra addons only (not included ones) */}
+              {selectedAddons.filter(id => !isIncluded(id)).length > 0 && (
                 <div style={{ borderBottom: "1px solid rgba(245,244,239,0.08)", paddingBottom: "1rem", marginBottom: "1rem" }}>
-                  {selectedAddons.map(id => {
+                  {selectedAddons.filter(id => !isIncluded(id)).map(id => {
                     const addon = addons.find(a => a.id === id);
                     if (!addon) return null;
                     return (
@@ -386,7 +413,6 @@ function ConfigureContent() {
                 </div>
               )}
 
-              {/* Total */}
               <div style={{ marginBottom: "1.5rem" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.375rem" }}>
                   <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "rgba(245,244,239,0.5)" }}>Once-off total</span>
@@ -433,9 +459,7 @@ function ConfigureContent() {
                 <path d="M9 5.5L12.5 9L9 12.5L5.5 9L9 5.5Z" fill="white" opacity="0.7"/>
               </svg>
             </div>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.625rem", color: "var(--dark)", marginBottom: "0.625rem" }}>
-              Almost there.
-            </h2>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.625rem", color: "var(--dark)", marginBottom: "0.625rem" }}>Almost there.</h2>
             <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.9rem", color: "var(--muted)", lineHeight: 1.7 }}>
               Sign in with Google to submit your brief and track your project from your dashboard.
             </p>
