@@ -52,7 +52,7 @@ function ConfigureContent() {
   const [selectedTier, setSelectedTier] = useState(initialTier);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [showLogin, setShowLogin] = useState(false);
-  const [user, setUser] = useState<{ email?: string; user_metadata?: { full_name?: string } } | null>(null);
+  const [user, setUser] = useState<{ id: string; email?: string; user_metadata?: { full_name?: string } } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
