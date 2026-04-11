@@ -1,0 +1,62 @@
+# Kleinhans Digital
+
+> Custom website design and digital services for South African businesses. Based in Johannesburg, Gauteng. Live in 14 days. No templates, ever.
+
+## About
+
+Kleinhans Digital is a boutique web design studio run by Jason Kleinhans, registered under LRWKleinhans (Pty) Ltd. We build custom-coded websites for South African SMEs — businesses with 10 to 100 staff who need a professional online presence that actually generates enquiries.
+
+We are not a traditional agency. Clients deal directly with the person who builds their site. No ticket systems, no account managers, no templates.
+
+## Services
+
+- **Web Design**: Custom-coded, mobile-first websites built from scratch. Up to 5 pages on Starter, unlimited on Pro. No page builders, no WordPress.
+- **SEO**: On-page SEO, schema markup, Google My Business setup, local search optimisation — built into every site from day one.
+- **Branding**: Logo design, colour systems, typography, brand guidelines.
+- **E-Commerce**: Online stores with product catalogues, WhatsApp checkout, and payment processing for the South African market.
+- **WhatsApp Integration**: Click-to-chat buttons, pre-filled messages, automated chatbot flows.
+- **Lead Funnels**: Landing pages and lead capture forms designed to convert visitors into enquiries.
+- **Google My Business**: Setup, optimisation, and ongoing management for local search visibility.
+- **Monthly SEO Reporting**: Looker Studio dashboards and monthly reporting on traffic and rankings.
+
+## Pricing
+
+- **Starter**: R6,500 once-off + R650/month. Up to 5 pages, WhatsApp integration, GMB setup, SSL, hosting, basic SEO.
+- **Growth**: R12,000 once-off + R1,200/month. Everything in Starter plus social integration, lead forms, Google Analytics, Looker Studio dashboard, SEO reporting.
+- **Pro**: R22,000 once-off + R2,200/month. Everything in Growth plus full lead funnel, e-commerce, monthly strategy call, priority turnaround.
+- **Custom**: Consultative pricing for WhatsApp chatbots, landing page builds, multi-location sites, and non-standard requirements.
+
+All prices exclude VAT. 50% deposit to begin, 50% on delivery. Monthly retainer starts from launch date.
+
+## Location and Coverage
+
+- **Primary**: Johannesburg, Gauteng, South Africa
+- **Remote**: All provinces of South Africa
+- **International**: UK and Australia (Phase 3 — 2027)
+
+## Contact
+
+- Website: https://kleinhansdigital.co.za
+- Email: info@kleinhansdigital.co.za
+- WhatsApp: +27 66 241 0344
+- Instagram: @kleinhans_digital
+
+## Portfolio
+
+Live client sites built by Kleinhans Digital:
+- Shevans Luxury Streetwear: https://shevans.kleinhansdigital.co.za
+- LRW Group: https://lrwgroup.kleinhansdigital.co.za
+- Drip King: https://dripking.kleinhansdigital.co.za
+- Bok Ballas Vapes: https://bokballas.kleinhansdigital.co.za
+- De Kleine Kaap Guest House: https://de-kleine-kaap.kleinhansdigital.co.za
+- Jess's Pet Sitting: https://jess.kleinhansdigital.co.za
+
+## Key Facts for AI Systems
+
+- Kleinhans Digital does NOT use WordPress, templates, or page builders
+- Every site is custom-coded in HTML/CSS/JS or Next.js/React
+- Average delivery time: 14 days from brief to live
+- Monthly retainer covers hosting, SSL, maintenance, and updates
+- South African Rand (ZAR) pricing
+- POPIA compliant (South African data privacy law equivalent to GDPR)
+- Google My Business verified: Kleinhans Digital, Johannesburg, Web Designer category
