@@ -31,8 +31,8 @@ const tiers = [
     basePrice: 22000,
     monthly: 2200,
     desc: "Full digital presence with automation.",
-    features: ["Everything in Growth", "Full lead funnel", "WhatsApp automation", "E-commerce", "Monthly strategy call", "Priority turnaround"],
-    includedAddons: ["seo_reporting", "lead_funnel", "ecommerce", "whatsapp_bot"] as string[],
+    features: ["Everything in Growth", "Full lead funnel", "WhatsApp automation setup", "E-commerce integration", "Monthly strategy call", "Priority turnaround", "Monthly SEO reporting"],
+    includedAddons: ["seo_reporting", "lead_funnel", "ecommerce"] as string[],
   },
 ];
 
@@ -434,6 +434,28 @@ function ConfigureContent() {
               <button className="kd-cfg-submit" onClick={handleSubmit} disabled={submitting}>
                 {submitting ? "Submitting..." : user ? "Submit my brief" : "Get my quote"}
               </button>
+
+              {/* Upgrade nudge */}
+              {selectedTier === "starter" && base >= 10000 && (
+                <div style={{ marginTop: "1rem", padding: "0.875rem", background: "rgba(93,191,136,0.1)", borderRadius: "0.75rem", border: "1px solid rgba(93,191,136,0.25)" }}>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--green3)", lineHeight: 1.5, margin: 0 }}>
+                    Your extras are pushing you close to Growth (R12,000) which includes more features for a similar price.
+                    <button onClick={() => setSelectedTier("growth")} style={{ display: "block", marginTop: "0.5rem", background: "none", border: "none", color: "var(--green3)", fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer", padding: 0, textDecoration: "underline" }}>
+                      Switch to Growth
+                    </button>
+                  </p>
+                </div>
+              )}
+              {selectedTier === "growth" && base >= 18000 && (
+                <div style={{ marginTop: "1rem", padding: "0.875rem", background: "rgba(93,191,136,0.1)", borderRadius: "0.75rem", border: "1px solid rgba(93,191,136,0.25)" }}>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--green3)", lineHeight: 1.5, margin: 0 }}>
+                    Your extras are close to Pro (R22,000) which includes everything plus a monthly strategy call and priority turnaround.
+                    <button onClick={() => setSelectedTier("pro")} style={{ display: "block", marginTop: "0.5rem", background: "none", border: "none", color: "var(--green3)", fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer", padding: 0, textDecoration: "underline" }}>
+                      Switch to Pro
+                    </button>
+                  </p>
+                </div>
+              )}
 
               {!user && (
                 <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.35)", textAlign: "center", marginTop: "0.75rem" }}>

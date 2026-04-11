@@ -152,7 +152,7 @@ export default function Nav() {
                 Dashboard
               </Link>
             ) : (
-              <Link href="/configure" className="kd-nav-login">
+              <Link href="/login" className="kd-nav-login">
                 Sign in
               </Link>
             )}
@@ -191,7 +191,7 @@ export default function Nav() {
                 My Dashboard
               </Link>
             ) : (
-              <Link href="/configure" onClick={() => setMenuOpen(false)} style={{ display: "block", marginTop: "0.5rem", fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "rgba(245,244,239,0.5)", textDecoration: "none", padding: "0.5rem 0" }}>
+              <Link href="/login" onClick={() => setMenuOpen(false)} style={{ display: "block", marginTop: "0.5rem", fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "rgba(245,244,239,0.5)", textDecoration: "none", padding: "0.5rem 0" }}>
                 Sign in
               </Link>
             )}
