@@ -308,9 +308,9 @@ export default function Pricing() {
 
               {/* CTA */}
               <a
-                href={tier.isCustom ? "https://wa.me/27662410344?text=Hi%20Kleinhans%20Digital%2C%20I%27d%20like%20to%20discuss%20a%20custom%20project." : "#contact"}
-                target={tier.isCustom ? "_blank" : undefined}
-                rel={tier.isCustom ? "noopener noreferrer" : undefined}
+                href={tier.isCustom ? "/configure?tier=custom" : `/configure?tier=${tier.name.toLowerCase()}`}
+                
+                
                 className={`kd-price-cta ${tier.featured ? "dark" : tier.isCustom ? "wa" : "light"}`}
               >
                 {tier.cta}
