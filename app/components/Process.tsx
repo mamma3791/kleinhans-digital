@@ -15,7 +15,7 @@ export default function Process() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="process" ref={ref} style={{ padding: "7rem 0", background: "var(--cream2)" }}>
+    <section id="process" ref={ref} style={{ padding: "7rem 0 5rem", background: "var(--cream2)" }}>
       <style>{`
         .kd-process-step {
           display: flex;

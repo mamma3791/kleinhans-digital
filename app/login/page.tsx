@@ -38,12 +38,44 @@ function LoginContent() {
   const signInWithGoogle = async () => {
     setLoading(true);
     const returnUrl = buildReturnUrl();
-    await supabase.auth.signInWithOAuth({
+    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(returnUrl)}`;
+
+    // Open Google OAuth in a popup window
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    const popup = window.open(
+      "",
+      "google-signin",
+      `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no`
+    );
+
+    const { data } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(returnUrl)}`,
+        redirectTo,
+        skipBrowserRedirect: true,
       },
     });
+
+    if (data?.url && popup) {
+      popup.location.href = data.url;
+      // Poll for popup close and check auth state
+      const timer = setInterval(async () => {
+        if (popup.closed) {
+          clearInterval(timer);
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            router.push(buildReturnUrl());
+          } else {
+            setLoading(false);
+          }
+        }
+      }, 500);
+    } else {
+      setLoading(false);
+    }
   };
 
   return (

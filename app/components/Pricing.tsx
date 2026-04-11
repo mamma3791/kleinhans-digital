@@ -65,11 +65,12 @@ const tiers = [
     desc: "Not sure what you need, or need something outside the standard tiers? We will figure it out together.",
     features: [
       "Scaled-down or simplified builds",
-      "WhatsApp chatbot setup",
+      "WhatsApp chatbot setup and automation",
       "Landing page only builds",
       "Multi-location or franchise sites",
-      "Ongoing retainer support only",
-      "Anything that doesn't fit a box",
+      "Ongoing retainer and support only",
+      "Product photography coordination",
+      "Anything that doesn't fit a standard package",
     ],
     cta: "Start a conversation",
     featured: false,
@@ -90,7 +91,7 @@ export default function Pricing() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="pricing" ref={ref} style={{ padding: "7rem 0", background: "var(--cream2)" }}>
+    <section id="pricing" ref={ref} style={{ padding: "3rem 0 7rem", background: "var(--cream2)" }}>
       <style>{`
         .kd-price-grid {
           display: grid;
@@ -278,7 +279,7 @@ export default function Pricing() {
               }}>
                 <div style={{
                   fontFamily: "var(--font-serif)",
-                  fontSize: tier.isCustom ? "1.75rem" : "2.25rem",
+                  fontSize: "2.25rem",
                   color: tier.featured ? "var(--cream)" : "var(--dark)",
                   lineHeight: 1,
                   marginBottom: "0.25rem",
