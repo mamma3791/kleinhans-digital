@@ -162,6 +162,32 @@ export default function Portfolio() {
           overflow: hidden;
           text-overflow: ellipsis;
         }
+        .kd-port-featured-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          align-items: center;
+          background: rgba(245,244,239,0.03);
+          border: 1px solid rgba(245,244,239,0.07);
+          border-radius: 1.375rem;
+          padding: 2rem;
+          min-height: 26rem;
+        }
+        .kd-port-cta-row {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          flex-wrap: nowrap;
+        }
+        @media (max-width: 767px) {
+          .kd-port-featured-grid {
+            grid-template-columns: 1fr !important;
+            min-height: unset !important;
+            padding: 1.25rem !important;
+            gap: 1.25rem !important;
+          }
+          .kd-port-thumb { width: 7.5rem !important; }
+        }
       `}</style>
 
       <div className="kd-container">
@@ -202,7 +228,7 @@ export default function Portfolio() {
           transition={{ duration: 0.7, delay: 0.25 }}
           style={{ marginBottom: "1.25rem" }}
         >
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", alignItems: "center", background: "rgba(245,244,239,0.03)", border: "1px solid rgba(245,244,239,0.07)", borderRadius: "1.375rem", padding: "2rem", minHeight: "26rem" }}>
+          <div className="kd-port-featured-grid">
 
             {/* Screenshot */}
             <AnimatePresence mode="wait">
@@ -246,7 +272,7 @@ export default function Portfolio() {
                 <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.9rem", lineHeight: 1.75, color: "rgba(245,244,239,0.52)", marginBottom: "1.75rem" }}>
                   {project.desc}
                 </p>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <div className="kd-port-cta-row">
                   <a href={project.url} target="_blank" rel="noopener noreferrer" className="kd-port-visit">
                     View live site
                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
