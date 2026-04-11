@@ -3,69 +3,119 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[var(--dark2)] py-16 border-t border-[var(--cream)]/5">
+    <footer style={{ background: "var(--dark2)", borderTop: "1px solid rgba(245,244,239,0.07)" }}>
+      <style>{`
+        .kd-footer-link {
+          font-family: var(--font-sans);
+          font-size: 0.875rem;
+          color: rgba(245,244,239,0.35);
+          text-decoration: none;
+          transition: color 0.2s ease;
+          display: block;
+        }
+        .kd-footer-link:hover { color: rgba(245,244,239,0.65); }
+        .kd-footer-label {
+          font-family: var(--font-sans);
+          font-size: 0.65rem;
+          font-weight: 600;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: rgba(245,244,239,0.4);
+          margin-bottom: 1.25rem;
+        }
+        .kd-footer-grid {
+          display: grid;
+          grid-template-columns: 1.4fr 1fr 1fr;
+          gap: 3rem;
+          padding: 4rem 0 3rem;
+        }
+        .kd-footer-bottom {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 1.5rem 0;
+          border-top: 1px solid rgba(245,244,239,0.06);
+          flex-wrap: wrap;
+        }
+        @media (max-width: 767px) {
+          .kd-footer-grid { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 0 2rem; }
+          .kd-footer-bottom { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+        }
+      `}</style>
+
       <div className="kd-container">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+        <div className="kd-footer-grid">
 
           {/* Brand */}
           <div>
-            <Link href="/" className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-[var(--green)] flex items-center justify-center">
+            <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none", marginBottom: "1rem" }}>
+              <div style={{
+                width: "2.25rem", height: "2.25rem",
+                borderRadius: "0.625rem",
+                background: "var(--green)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}>
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                   <path d="M2 9L9 2L16 9L9 16L2 9Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
                   <path d="M9 5.5L12.5 9L9 12.5L5.5 9L9 5.5Z" fill="white" opacity="0.7"/>
                 </svg>
               </div>
-              <span className="text-[var(--cream)] font-semibold text-[15px]" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                Kleinhans<span className="text-[var(--green3)]">.</span>Digital
+              <span style={{ fontFamily: "var(--font-sans)", color: "var(--cream)", fontWeight: 600, fontSize: "0.9375rem" }}>
+                Kleinhans<span style={{ color: "var(--green3)" }}>.</span>Digital
               </span>
             </Link>
-            <p className="text-[var(--cream)]/30 text-sm leading-relaxed max-w-xs" style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}>
+            <p style={{
+              fontFamily: "var(--font-sans)",
+              fontWeight: 300,
+              fontSize: "0.875rem",
+              lineHeight: 1.7,
+              color: "rgba(245,244,239,0.32)",
+              maxWidth: "18rem",
+            }}>
               Custom websites for South African businesses. Built from scratch, mobile ready, SEO optimised.
             </p>
           </div>
 
           {/* Services */}
           <div>
-            <h4 className="text-[var(--cream)]/50 text-xs font-semibold tracking-[3px] uppercase mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>Services</h4>
-            <ul className="space-y-2">
+            <p className="kd-footer-label">Services</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
               {["Web Design", "SEO Optimisation", "Branding & Identity", "E-Commerce", "WhatsApp Integration", "Google My Business"].map((s) => (
-                <li key={s}>
-                  <span className="text-[var(--cream)]/35 hover:text-[var(--cream)]/60 text-sm transition-colors" style={{ fontFamily: "'Outfit', sans-serif" }}>{s}</span>
-                </li>
+                <span key={s} className="kd-footer-link">{s}</span>
               ))}
-            </ul>
+            </div>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="text-[var(--cream)]/50 text-xs font-semibold tracking-[3px] uppercase mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>Contact</h4>
-            <ul className="space-y-3">
-              <li>
-                <a href="mailto:info@kleinhansdigital.co.za" className="text-[var(--cream)]/35 hover:text-[var(--cream)]/60 text-sm transition-colors" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                  info@kleinhansdigital.co.za
-                </a>
-              </li>
-              <li>
-                <a href="https://wa.me/27662410344" className="text-[var(--cream)]/35 hover:text-[var(--cream)]/60 text-sm transition-colors" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                  066 241 0344
-                </a>
-              </li>
-              <li>
-                <span className="text-[var(--cream)]/35 text-sm" style={{ fontFamily: "'Outfit', sans-serif" }}>Johannesburg, Gauteng</span>
-              </li>
-            </ul>
+            <p className="kd-footer-label">Contact</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              <a href="mailto:info@kleinhansdigital.co.za" className="kd-footer-link">
+                info@kleinhansdigital.co.za
+              </a>
+              <a href="https://wa.me/27662410344" className="kd-footer-link">
+                066 241 0344
+              </a>
+              <a href="https://www.instagram.com/kleinhans_digital" target="_blank" rel="noopener noreferrer" className="kd-footer-link">
+                @kleinhans_digital
+              </a>
+              <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "rgba(245,244,239,0.32)" }}>
+                Johannesburg, Gauteng
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-[var(--cream)]/5">
-          <p className="text-[var(--cream)]/20 text-xs" style={{ fontFamily: "'Outfit', sans-serif" }}>
+        {/* Bottom bar */}
+        <div className="kd-footer-bottom">
+          <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.2)" }}>
             &copy; {new Date().getFullYear()} LRWKleinhans (Pty) Ltd. Trading as Kleinhans Digital.
           </p>
-          <div className="flex gap-6">
+          <div style={{ display: "flex", gap: "1.5rem" }}>
             {["Privacy Policy", "Terms of Service"].map((t) => (
-              <span key={t} className="text-[var(--cream)]/20 hover:text-[var(--cream)]/40 text-xs transition-colors" style={{ fontFamily: "'Outfit', sans-serif" }}>
+              <span key={t} style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.2)", cursor: "pointer" }}>
                 {t}
               </span>
             ))}
