@@ -56,41 +56,50 @@ function ConfigureContent() {
   const supabase = createClient();
 
   const initialTier = searchParams.get("tier") || "starter";
+  const initialAddons = searchParams.get("addons")?.split(",").filter(Boolean) || [];
+  const initialMessage = searchParams.get("message") || "";
+  const autosubmit = searchParams.get("autosubmit") === "1";
+
   const [selectedTier, setSelectedTier] = useState(initialTier);
-  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [selectedAddons, setSelectedAddons] = useState<string[]>(initialAddons);
   const [showLogin, setShowLogin] = useState(false);
   const [user, setUser] = useState<{ id: string; email?: string; user_metadata?: { full_name?: string } } | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(initialMessage);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      // Auto-submit if returning from login with selections
+      if (user && autosubmit && initialAddons.length > 0) {
+        setTimeout(() => handleAutoSubmit(user), 500);
+      }
+    });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
-      if (session?.user) setShowLogin(false);
     });
     return () => subscription.unsubscribe();
   }, []);
 
-  // Auto-select included addons when tier changes
+  // Auto-tick included addons when tier changes — but only if user hasn't restored from URL
   useEffect(() => {
-    const tier = tiers.find(t => t.id === selectedTier);
-    if (tier) {
-      setSelectedAddons(tier.includedAddons);
+    if (initialAddons.length === 0) {
+      const tier = tiers.find(t => t.id === selectedTier);
+      if (tier) setSelectedAddons(tier.includedAddons);
     }
   }, [selectedTier]);
 
   const tier = tiers.find(t => t.id === selectedTier) || tiers[0];
-
   const isIncluded = (id: string) => tier.includedAddons.includes(id);
 
-  const calcPrice = () => {
-    let base = tier.basePrice;
-    const monthly = tier.monthly;
+  const calcPrice = (overrideTier?: string, overrideAddons?: string[]) => {
+    const t = tiers.find(x => x.id === (overrideTier || selectedTier)) || tiers[0];
+    let base = t.basePrice;
+    const monthly = t.monthly;
     let consultative = false;
-    selectedAddons.forEach(id => {
-      if (isIncluded(id)) return; // already in tier price
+    (overrideAddons || selectedAddons).forEach(id => {
+      if (t.includedAddons.includes(id)) return;
       const addon = addons.find(a => a.id === id);
       if (addon) {
         if (addon.consultative) { consultative = true; }
@@ -98,6 +107,39 @@ function ConfigureContent() {
       }
     });
     return { base, monthly, consultative };
+  };
+
+  const handleAutoSubmit = async (loggedInUser: { id: string; email?: string; user_metadata?: { full_name?: string } }) => {
+    setSubmitting(true);
+    const { base, monthly, consultative } = calcPrice(initialTier, initialAddons);
+    const { error } = await supabase.from("quotes").insert({
+      user_id: loggedInUser.id,
+      tier: initialTier,
+      addons: initialAddons,
+      base_price: base,
+      monthly_price: monthly,
+      is_consultative: consultative,
+      message: initialMessage,
+      status: "submitted",
+    });
+    if (!error) {
+      await fetch(MAKE_WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "quote_submitted",
+          user_email: loggedInUser.email,
+          user_name: loggedInUser.user_metadata?.full_name,
+          tier: initialTier,
+          addons: initialAddons,
+          base_price: consultative ? "Consultative" : `R${base.toLocaleString()}`,
+          monthly_price: `R${monthly.toLocaleString()}/mo`,
+          message: initialMessage,
+        }),
+      }).catch(() => {});
+      setSubmitted(true);
+    }
+    setSubmitting(false);
   };
 
   const { base, monthly, consultative } = calcPrice();
@@ -110,9 +152,49 @@ function ConfigureContent() {
   };
 
   const handleSubmit = async () => {
-    if (!user) { setShowLogin(true); return; }
+    if (!user) {
+      const params = new URLSearchParams({
+        tier: selectedTier,
+        addons: selectedAddons.join(","),
+        message: message,
+        return: "configure",
+      });
+      router.push(`/login?${params.toString()}`);
+      return;
+    }
     setSubmitting(true);
     const { base, monthly, consultative } = calcPrice();
+
+    const { error } = await supabase.from("quotes").insert({
+      user_id: user.id,
+      tier: selectedTier,
+      addons: selectedAddons,
+      base_price: base,
+      monthly_price: monthly,
+      is_consultative: consultative,
+      message,
+      status: "submitted",
+    });
+
+    if (!error) {
+      await fetch(MAKE_WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "quote_submitted",
+          user_email: user.email,
+          user_name: user.user_metadata?.full_name,
+          tier: selectedTier,
+          addons: selectedAddons,
+          base_price: consultative ? "Consultative" : `R${base.toLocaleString()}`,
+          monthly_price: `R${monthly.toLocaleString()}/mo`,
+          message,
+        }),
+      }).catch(() => {});
+      setSubmitted(true);
+    }
+    setSubmitting(false);
+  };
 
     const { error } = await supabase.from("quotes").insert({
       user_id: user.id,
@@ -470,36 +552,6 @@ function ConfigureContent() {
           </div>
         </div>
       </div>
-
-      {/* Login overlay */}
-      {showLogin && (
-        <div className="kd-login-overlay" onClick={e => { if (e.target === e.currentTarget) setShowLogin(false); }}>
-          <div className="kd-login-card">
-            <div style={{ width: "3rem", height: "3rem", borderRadius: "0.75rem", background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.25rem" }}>
-              <svg width="20" height="20" viewBox="0 0 18 18" fill="none">
-                <path d="M2 9L9 2L16 9L9 16L2 9Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-                <path d="M9 5.5L12.5 9L9 12.5L5.5 9L9 5.5Z" fill="white" opacity="0.7"/>
-              </svg>
-            </div>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.625rem", color: "var(--dark)", marginBottom: "0.625rem" }}>Almost there.</h2>
-            <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.9rem", color: "var(--muted)", lineHeight: 1.7 }}>
-              Sign in with Google to submit your brief and track your project from your dashboard.
-            </p>
-            <button onClick={signInWithGoogle} className="kd-google-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              Continue with Google
-            </button>
-            <button onClick={() => setShowLogin(false)} style={{ display: "block", margin: "1rem auto 0", fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--muted)", background: "none", border: "none", cursor: "pointer" }}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

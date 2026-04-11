@@ -71,7 +71,7 @@ const tiers = [
       "Ongoing retainer support only",
       "Anything that doesn't fit a box",
     ],
-    cta: "Chat on WhatsApp",
+    cta: "Start a conversation",
     featured: false,
     isCustom: true,
   },
@@ -308,10 +308,8 @@ export default function Pricing() {
 
               {/* CTA */}
               <a
-                href={tier.isCustom ? "/configure?tier=custom" : `/configure?tier=${tier.name.toLowerCase()}`}
-                
-                
-                className={`kd-price-cta ${tier.featured ? "dark" : tier.isCustom ? "wa" : "light"}`}
+                href={`/configure?tier=${tier.name.toLowerCase()}`}
+                className={`kd-price-cta ${tier.featured ? "dark" : "light"}`}
               >
                 {tier.cta}
               </a>

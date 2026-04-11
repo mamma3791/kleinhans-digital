@@ -7,22 +7,41 @@ import Link from "next/link";
 function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") || "/dashboard";
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
 
+  // Capture all params to restore after login
+  const tier = searchParams.get("tier");
+  const addons = searchParams.get("addons");
+  const message = searchParams.get("message");
+  const returnTo = searchParams.get("return");
+
+  // Build the post-login redirect URL
+  const buildReturnUrl = () => {
+    if (returnTo === "configure") {
+      const params = new URLSearchParams();
+      if (tier) params.set("tier", tier);
+      if (addons) params.set("addons", addons);
+      if (message) params.set("message", message);
+      params.set("autosubmit", "1");
+      return `/configure?${params.toString()}`;
+    }
+    return "/dashboard";
+  };
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) router.push(next);
+      if (user) router.push(buildReturnUrl());
     });
   }, []);
 
   const signInWithGoogle = async () => {
     setLoading(true);
+    const returnUrl = buildReturnUrl();
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(returnUrl)}`,
       },
     });
   };
@@ -84,8 +103,8 @@ function LoginContent() {
             Kleinhans<span style={{ color: "var(--green3)" }}>.</span>Digital
           </span>
         </Link>
-        <Link href="/" style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--muted)", textDecoration: "none" }}>
-          Back to site
+        <Link href={returnTo === "configure" ? `/configure${tier ? `?tier=${tier}` : ""}` : "/"} style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--muted)", textDecoration: "none" }}>
+          Back
         </Link>
       </nav>
 
@@ -93,7 +112,6 @@ function LoginContent() {
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
         <div style={{ width: "100%", maxWidth: "26rem" }}>
 
-          {/* Logo mark */}
           <div style={{ width: "4rem", height: "4rem", borderRadius: "1.125rem", background: "var(--dark)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 2rem" }}>
             <svg width="28" height="28" viewBox="0 0 18 18" fill="none">
               <path d="M2 9L9 2L16 9L9 16L2 9Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -102,16 +120,28 @@ function LoginContent() {
           </div>
 
           <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "2rem", color: "var(--dark)", textAlign: "center", marginBottom: "0.625rem", letterSpacing: "-0.02em" }}>
-            Welcome back.
+            {returnTo === "configure" ? "Almost there." : "Welcome back."}
           </h1>
           <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.95rem", color: "var(--muted)", textAlign: "center", lineHeight: 1.7, marginBottom: "2.5rem" }}>
-            Sign in to your Kleinhans Digital account to track your project, view quotes, and manage your details.
+            {returnTo === "configure"
+              ? "Sign in with Google to submit your quote. Your selections will be saved."
+              : "Sign in to your Kleinhans Digital account to track your project and manage your details."}
           </p>
 
-          {/* Google sign in */}
+          {returnTo === "configure" && tier && (
+            <div style={{ background: "var(--cream2)", border: "1px solid rgba(45,106,79,0.15)", borderRadius: "0.875rem", padding: "0.875rem 1rem", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.625rem" }}>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--green)">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--muted)" }}>
+                Your <strong style={{ color: "var(--dark)" }}>{tier.charAt(0).toUpperCase() + tier.slice(1)}</strong> quote is saved and will be submitted automatically after sign in.
+              </span>
+            </div>
+          )}
+
           <button onClick={signInWithGoogle} disabled={loading} className="kd-login-google">
             {loading ? (
-              <span style={{ fontFamily: "var(--font-sans)" }}>Redirecting...</span>
+              <span style={{ fontFamily: "var(--font-sans)" }}>Redirecting to Google...</span>
             ) : (
               <>
                 <svg width="20" height="20" viewBox="0 0 24 24">
@@ -127,25 +157,14 @@ function LoginContent() {
 
           <div className="kd-login-divider">New here?</div>
 
-          {/* Sign up CTA */}
           <Link
             href="/configure"
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
-              width: "100%",
-              background: "var(--green)",
-              color: "var(--cream)",
-              fontFamily: "var(--font-sans)",
-              fontSize: "1rem",
-              fontWeight: 600,
-              padding: "1rem",
-              borderRadius: "0.875rem",
-              textDecoration: "none",
-              transition: "background 0.2s ease",
-              boxSizing: "border-box",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+              width: "100%", background: "var(--green)", color: "var(--cream)",
+              fontFamily: "var(--font-sans)", fontSize: "1rem", fontWeight: 600,
+              padding: "1rem", borderRadius: "0.875rem", textDecoration: "none",
+              transition: "background 0.2s ease", boxSizing: "border-box",
             }}
           >
             Get a quote and create an account
