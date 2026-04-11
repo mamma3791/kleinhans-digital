@@ -158,37 +158,6 @@ function ConfigureContent() {
     setSubmitting(false);
   };
 
-    const { error } = await supabase.from("quotes").insert({
-      user_id: user.id,
-      tier: selectedTier,
-      addons: selectedAddons,
-      base_price: base,
-      monthly_price: monthly,
-      is_consultative: consultative,
-      message,
-      status: "submitted",
-    });
-
-    if (!error) {
-      await fetch(MAKE_WEBHOOK, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "quote_submitted",
-          user_email: user.email,
-          user_name: user.user_metadata?.full_name,
-          tier: selectedTier,
-          addons: selectedAddons,
-          base_price: consultative ? "Consultative" : `R${base.toLocaleString()}`,
-          monthly_price: `R${monthly.toLocaleString()}/mo`,
-          message,
-        }),
-      }).catch(() => {});
-      setSubmitted(true);
-    }
-    setSubmitting(false);
-  };
-
   const signInWithGoogle = async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
