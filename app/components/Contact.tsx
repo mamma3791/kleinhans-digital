@@ -2,6 +2,9 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
+const MAKE_WEBHOOK = "https://hook.eu1.make.com/jr7gnafrkqbs40c7jd7rvj5vbu7p9vbn";
+const TALLY_URL = "https://tally.so/r/LZJ5ej";
+
 export default function Contact() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -12,11 +15,31 @@ export default function Contact() {
     setStatus("loading");
     const form = e.currentTarget;
     const data = new FormData(form);
+
+    const payload = {
+      name: data.get("name"),
+      business: data.get("business"),
+      email: data.get("email"),
+      phone: data.get("phone"),
+      message: data.get("message"),
+      tally_url: TALLY_URL,
+      submitted_at: new Date().toISOString(),
+    };
+
     try {
+      // Send to Web3Forms for email delivery
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: data,
       });
+
+      // Fire to Make.com webhook (non-blocking — don't let this kill the form)
+      fetch(MAKE_WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }).catch(() => {});
+
       if (res.ok) { setStatus("success"); form.reset(); }
       else setStatus("error");
     } catch { setStatus("error"); }
