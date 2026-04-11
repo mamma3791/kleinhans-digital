@@ -30,6 +30,7 @@ export default function Nav() {
     { label: "Work", href: "#work" },
     { label: "Process", href: "#process" },
     { label: "Pricing", href: "#pricing" },
+    { label: "Blog", href: "/blog" },
   ];
 
   return (

@@ -82,8 +82,15 @@ export default function Footer() {
           <div>
             <p className="kd-footer-label">Services</p>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-              {["Web Design", "SEO Optimisation", "Branding & Identity", "E-Commerce", "WhatsApp Integration", "Google My Business"].map((s) => (
-                <span key={s} className="kd-footer-link">{s}</span>
+              {[
+                { label: "Web Design", slug: "web-design-johannesburg" },
+                { label: "SEO Optimisation", slug: "seo-optimisation-south-africa" },
+                { label: "Branding & Identity", slug: "branding-identity-small-business" },
+                { label: "E-Commerce", slug: "ecommerce-south-africa" },
+                { label: "WhatsApp Integration", slug: "whatsapp-integration-business" },
+                { label: "Google My Business", slug: "google-my-business-setup" },
+              ].map((s) => (
+                <a key={s.label} href={`/blog/${s.slug}`} className="kd-footer-link">{s.label}</a>
               ))}
             </div>
           </div>
