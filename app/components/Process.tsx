@@ -135,14 +135,14 @@ export default function Process() {
 
         {/* Steps with vertical line */}
         <div style={{ position: "relative" }}>
-          {/* Background line */}
+          {/* Background line — starts and ends at circle centers (1.375rem = half circle height) */}
           <div
             className="kd-process-line"
             style={{
               position: "absolute",
               left: "1.3125rem",
-              top: 0,
-              bottom: 0,
+              top: "1.375rem",
+              bottom: "1.375rem",
               width: "1px",
               background: "rgba(45,106,79,0.12)",
             }}
@@ -156,8 +156,8 @@ export default function Process() {
             style={{
               position: "absolute",
               left: "1.3125rem",
-              top: 0,
-              bottom: 0,
+              top: "1.375rem",
+              bottom: "1.375rem",
               width: "1px",
               background: "var(--green)",
               transformOrigin: "top",
