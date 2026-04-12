@@ -69,7 +69,6 @@ const tiers = [
       "Landing page only builds",
       "Multi-location or franchise sites",
       "Ongoing retainer and support only",
-      "Product photography coordination",
       "Anything that doesn't fit a standard package",
     ],
     cta: "Start a conversation",
