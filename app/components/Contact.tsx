@@ -2,7 +2,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
-const MAKE_WEBHOOK = "https://hook.eu1.make.com/jr7gnafrkqbs40c7jd7rvj5vbu7p9vbn";
 const TALLY_URL = "https://tally.so/r/LZJ5ej";
 
 export default function Contact() {
@@ -33,8 +32,8 @@ export default function Contact() {
         body: data,
       });
 
-      // Fire to Make.com webhook (non-blocking — don't let this kill the form)
-      fetch(MAKE_WEBHOOK, {
+      // Fire to Make.com webhook via API route (non-blocking)
+      fetch("/api/quote-notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

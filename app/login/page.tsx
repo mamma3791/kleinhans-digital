@@ -207,9 +207,9 @@ function LoginContent() {
 
           <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--muted)", textAlign: "center", marginTop: "1.5rem", lineHeight: 1.6 }}>
             By signing in you agree to our{" "}
-            <span style={{ color: "var(--green)" }}>Privacy Policy</span>
+            <a href="/privacy-policy" style={{ color: "var(--green)", textDecoration: "none" }}>Privacy Policy</a>
             {" "}and{" "}
-            <span style={{ color: "var(--green)" }}>Terms of Service</span>.
+            <a href="/terms-of-service" style={{ color: "var(--green)", textDecoration: "none" }}>Terms of Service</a>.
           </p>
         </div>
       </div>

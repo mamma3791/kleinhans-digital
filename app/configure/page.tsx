@@ -1,10 +1,8 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-
-const MAKE_WEBHOOK = "https://hook.eu1.make.com/jr7gnafrkqbs40c7jd7rvj5vbu7p9vbn";
 
 const tiers = [
   {
@@ -58,14 +56,15 @@ function ConfigureContent() {
   const initialTier = searchParams.get("tier") || "starter";
   const initialAddons = searchParams.get("addons")?.split(",").filter(Boolean) || [];
   const initialMessage = searchParams.get("message") || "";
+  const autosubmit = searchParams.get("autosubmit");
 
   const [selectedTier, setSelectedTier] = useState(initialTier);
   const [selectedAddons, setSelectedAddons] = useState<string[]>(initialAddons);
-  const [showLogin, setShowLogin] = useState(false);
   const [user, setUser] = useState<{ id: string; email?: string; user_metadata?: { full_name?: string } } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(initialMessage);
   const [submitted, setSubmitted] = useState(false);
+  const hasAutoSubmitted = useRef(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -84,6 +83,15 @@ function ConfigureContent() {
       if (tier) setSelectedAddons(tier.includedAddons);
     }
   }, [selectedTier]);
+
+  // Auto-submit when returning from OAuth with a saved quote
+  useEffect(() => {
+    if (user && autosubmit === "1" && !hasAutoSubmitted.current && !submitted) {
+      hasAutoSubmitted.current = true;
+      handleSubmit();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const tier = tiers.find(t => t.id === selectedTier) || tiers[0];
   const isIncluded = (id: string) => tier.includedAddons.includes(id);
@@ -139,7 +147,7 @@ function ConfigureContent() {
     });
 
     if (!error) {
-      await fetch(MAKE_WEBHOOK, {
+      await fetch("/api/quote-notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -156,15 +164,6 @@ function ConfigureContent() {
       setSubmitted(true);
     }
     setSubmitting(false);
-  };
-
-  const signInWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/configure`,
-      },
-    });
   };
 
   if (submitted) {
@@ -250,37 +249,6 @@ function ConfigureContent() {
         }
         .kd-cfg-submit:hover { background: var(--green2); }
         .kd-cfg-submit:disabled { opacity: 0.6; cursor: default; }
-        .kd-login-overlay {
-          position: fixed; inset: 0;
-          background: rgba(15,28,21,0.7);
-          display: flex; align-items: center; justify-content: center;
-          z-index: 100; padding: 1.5rem;
-          backdrop-filter: blur(4px);
-        }
-        .kd-login-card {
-          background: var(--cream);
-          border-radius: 1.5rem;
-          padding: 2.5rem;
-          max-width: 28rem;
-          width: 100%;
-          text-align: center;
-        }
-        .kd-google-btn {
-          display: flex; align-items: center; justify-content: center; gap: 0.75rem;
-          width: 100%;
-          background: #fff;
-          border: 1.5px solid rgba(26,36,32,0.15);
-          border-radius: 0.75rem;
-          padding: 0.875rem;
-          font-family: var(--font-sans);
-          font-size: 0.9375rem;
-          font-weight: 500;
-          color: var(--dark);
-          cursor: pointer;
-          transition: border-color 0.2s ease, box-shadow 0.2s ease;
-          margin-top: 1.5rem;
-        }
-        .kd-google-btn:hover { border-color: var(--green); box-shadow: 0 2px 12px rgba(58,138,98,0.12); }
         @media (max-width: 1023px) {
           .kd-cfg-layout { grid-template-columns: 1fr !important; }
           .kd-cfg-sticky { position: static !important; }
@@ -306,9 +274,9 @@ function ConfigureContent() {
         {user ? (
           <Link href="/dashboard" style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 600, color: "var(--green)", textDecoration: "none" }}>Dashboard</Link>
         ) : (
-          <button onClick={() => setShowLogin(true)} style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 600, color: "var(--green)", background: "none", border: "none", cursor: "pointer" }}>
+          <Link href="/login" style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 600, color: "var(--green)", textDecoration: "none" }}>
             Sign in
-          </button>
+          </Link>
         )}
       </nav>
 
