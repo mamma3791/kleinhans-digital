@@ -1,5 +1,23 @@
 import { sanityClient, queries } from "@/sanity/client";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Blog — Web Design & SEO Insights for SA Businesses",
+  description: "Practical guides on web design, SEO, and digital marketing for South African businesses. Written by Kleinhans Digital, Johannesburg.",
+  alternates: { canonical: "https://kleinhansdigital.co.za/blog" },
+  openGraph: {
+    title: "Blog | Kleinhans Digital",
+    description: "Practical guides on web design, SEO, and digital marketing for South African businesses.",
+    url: "https://kleinhansdigital.co.za/blog",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Blog | Kleinhans Digital",
+    description: "Practical guides on web design, SEO, and digital marketing for South African businesses.",
+  },
+};
 
 interface Post {
   _id: string;
@@ -70,7 +88,7 @@ export default async function BlogPage() {
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--cream)", borderBottom: "1px solid rgba(45,106,79,0.1)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none" }}>
           <div style={{ width: "2rem", height: "2rem", borderRadius: "0.5rem", background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M2 9L9 2L16 9L9 16L2 9Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
               <path d="M9 5.5L12.5 9L9 12.5L5.5 9L9 5.5Z" fill="white" opacity="0.7"/>
             </svg>

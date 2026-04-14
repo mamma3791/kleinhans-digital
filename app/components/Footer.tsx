@@ -121,11 +121,12 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} LRWKleinhans (Pty) Ltd. Trading as Kleinhans Digital.
           </p>
           <div style={{ display: "flex", gap: "1.5rem" }}>
-            {["Privacy Policy", "Terms of Service"].map((t) => (
-              <span key={t} style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.2)", cursor: "pointer" }}>
-                {t}
-              </span>
-            ))}
+            <Link href="/privacy-policy" style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.2)", textDecoration: "none", transition: "color 0.2s ease" }}>
+              Privacy Policy
+            </Link>
+            <Link href="/terms-of-service" style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.2)", textDecoration: "none", transition: "color 0.2s ease" }}>
+              Terms of Service
+            </Link>
           </div>
         </div>
       </div>

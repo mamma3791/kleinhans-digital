@@ -2,6 +2,7 @@ import { sanityClient, queries } from "@/sanity/client";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
 
@@ -61,6 +62,54 @@ const portableTextComponents = {
   },
 };
 
+export async function generateStaticParams() {
+  try {
+    const posts: { slug: { current: string } }[] = await sanityClient.fetch(
+      `*[_type == "post"] { slug }`
+    );
+    return posts.map((post) => ({ slug: post.slug.current }));
+  } catch {
+    return [];
+  }
+}
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const { slug } = await params;
+  let post = null;
+  try {
+    post = await sanityClient.fetch(queries.postBySlug, { slug });
+  } catch {
+    return {};
+  }
+  if (!post) return {};
+
+  const category = categoryLabels[post.category] || post.category;
+  const canonicalUrl = `https://kleinhansdigital.co.za/blog/${slug}`;
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url: canonicalUrl,
+      type: "article",
+      publishedTime: post.publishedAt,
+      authors: ["Kleinhans Digital"],
+      tags: [category, "Web Design", "South Africa"],
+      siteName: "Kleinhans Digital",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+    },
+  };
+}
+
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   let post = null;
@@ -71,14 +120,79 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   }
   if (!post) notFound();
 
+  const canonicalUrl = `https://kleinhansdigital.co.za/blog/${slug}`;
+  const category = categoryLabels[post.category] || post.category;
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.excerpt,
+    "datePublished": post.publishedAt,
+    "dateModified": post.publishedAt,
+    "url": canonicalUrl,
+    "inLanguage": "en-ZA",
+    "author": {
+      "@type": "Organization",
+      "name": "Kleinhans Digital",
+      "url": "https://kleinhansdigital.co.za",
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Kleinhans Digital",
+      "url": "https://kleinhansdigital.co.za",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://kleinhansdigital.co.za/favicon.ico",
+      },
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://kleinhansdigital.co.za",
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://kleinhansdigital.co.za/blog",
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": post.title,
+        "item": canonicalUrl,
+      },
+    ],
+  };
+
   return (
     <div style={{ minHeight: "100vh", background: "var(--cream)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--cream)", borderBottom: "1px solid rgba(45,106,79,0.1)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none" }}>
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none" }} aria-label="Kleinhans Digital home">
           <div style={{ width: "2rem", height: "2rem", borderRadius: "0.5rem", background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M2 9L9 2L16 9L9 16L2 9Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
               <path d="M9 5.5L12.5 9L9 12.5L5.5 9L9 5.5Z" fill="white" opacity="0.7"/>
             </svg>
@@ -95,11 +209,28 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       {/* Article */}
       <article style={{ maxWidth: "44rem", margin: "0 auto", padding: "4rem 1.5rem 6rem" }}>
 
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" style={{ marginBottom: "2rem" }}>
+          <ol style={{ display: "flex", gap: "0.5rem", alignItems: "center", listStyle: "none", padding: 0, margin: 0, flexWrap: "wrap" }}>
+            <li>
+              <Link href="/" style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--muted)", textDecoration: "none" }}>Home</Link>
+            </li>
+            <li style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--muted)" }} aria-hidden="true">›</li>
+            <li>
+              <Link href="/blog" style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--muted)", textDecoration: "none" }}>Blog</Link>
+            </li>
+            <li style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--muted)" }} aria-hidden="true">›</li>
+            <li>
+              <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--green)" }}>{category}</span>
+            </li>
+          </ol>
+        </nav>
+
         {/* Meta */}
         <div style={{ marginBottom: "2.5rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
             <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", color: "var(--green)", background: "rgba(58,138,98,0.08)", borderRadius: "9999px", padding: "0.25rem 0.75rem" }}>
-              {categoryLabels[post.category] || post.category}
+              {category}
             </span>
             <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--muted)" }}>
               {new Date(post.publishedAt).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })}
@@ -123,6 +254,16 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           <PortableText value={post.body} components={portableTextComponents} />
         </div>
 
+        {/* Back to blog */}
+        <div style={{ marginTop: "3rem", marginBottom: "-1rem" }}>
+          <Link href="/blog" style={{ display: "inline-flex", alignItems: "center", gap: "0.375rem", fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--muted)", textDecoration: "none" }}>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            All posts
+          </Link>
+        </div>
+
         {/* CTA */}
         <div style={{ marginTop: "4rem", padding: "2.5rem", background: "var(--dark)", borderRadius: "1.375rem", textAlign: "center" }}>
           <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "4px", textTransform: "uppercase", color: "var(--green3)", marginBottom: "1rem" }}>
@@ -136,7 +277,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </p>
           <Link href="/configure" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "var(--green)", color: "var(--cream)", fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.9rem", padding: "0.875rem 1.75rem", borderRadius: "9999px", textDecoration: "none" }}>
             Get a quote
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>

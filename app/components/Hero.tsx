@@ -134,11 +134,11 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          {/* Headline */}
-          <div style={{ marginBottom: "2rem" }}>
+          {/* Headline — wrapped in h1 for SEO; inner spans preserve line-by-line animation */}
+          <h1 style={{ marginBottom: "2rem" }}>
             {words.map((word, i) => (
-              <div key={i} style={{ overflow: "hidden" }}>
-                <motion.div
+              <span key={i} style={{ overflow: "hidden", display: "block" }}>
+                <motion.span
                   initial={{ y: 80, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.9, ease: "easeOut", delay: 0.5 + i * 0.12 }}
@@ -151,10 +151,10 @@ export default function Hero() {
                   }}
                 >
                   {word}
-                </motion.div>
-              </div>
+                </motion.span>
+              </span>
             ))}
-          </div>
+          </h1>
 
           {/* Subtitle */}
           <motion.p

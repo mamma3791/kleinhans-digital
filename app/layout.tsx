@@ -4,16 +4,43 @@ import Cursor from "./components/Cursor";
 import LenisProvider from "./components/LenisProvider";
 
 export const metadata: Metadata = {
-  title: "Web Design Johannesburg | Kleinhans Digital | Websites That Work",
+  metadataBase: new URL("https://kleinhansdigital.co.za"),
+  title: {
+    template: "%s | Kleinhans Digital",
+    default: "Web Design Johannesburg | Kleinhans Digital | Websites That Work",
+  },
   description: "Kleinhans Digital builds custom websites for Johannesburg businesses. Mobile ready, SEO optimised, live in 14 days. From R6,500. No templates, no agencies.",
-  keywords: "web design Johannesburg, website design South Africa, SEO Johannesburg, small business website",
+  keywords: "web design Johannesburg, website design South Africa, SEO Johannesburg, small business website, web developer Johannesburg",
+  authors: [{ name: "Kleinhans Digital", url: "https://kleinhansdigital.co.za" }],
+  creator: "Kleinhans Digital",
+  publisher: "LRWKleinhans (Pty) Ltd",
   openGraph: {
     title: "Web Design Johannesburg | Kleinhans Digital",
-    description: "Custom websites for South African businesses. Mobile ready, SEO optimised, live in 14 days.",
+    description: "Custom websites for South African businesses. Mobile ready, SEO optimised, live in 14 days. From R6,500.",
     url: "https://kleinhansdigital.co.za",
     siteName: "Kleinhans Digital",
     locale: "en_ZA",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Web Design Johannesburg | Kleinhans Digital",
+    description: "Custom websites for South African businesses. Mobile ready, SEO optimised, live in 14 days.",
+    creator: "@kleinhans_digital",
+  },
+  alternates: {
+    canonical: "https://kleinhansdigital.co.za",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
