@@ -10,7 +10,6 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      // Check if profile exists
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase
@@ -19,12 +18,17 @@ export async function GET(request: Request) {
           .eq("id", user.id)
           .single();
 
-        // If no profile or missing key fields, send to onboarding
+        // Bridge page detects popup vs full-page and handles the redirect correctly
+        const bridgeUrl = `/auth/complete?next=${encodeURIComponent(next)}`;
+
         if (!profile || !profile.business_name || !profile.phone) {
-          return NextResponse.redirect(`${origin}/onboarding?next=${next}`);
+          // New user — collect details first, then send through bridge
+          const onboardingUrl = `/onboarding?next=${encodeURIComponent(bridgeUrl)}`;
+          return NextResponse.redirect(`${origin}${onboardingUrl}`);
         }
+
+        return NextResponse.redirect(`${origin}${bridgeUrl}`);
       }
-      return NextResponse.redirect(`${origin}${next}`);
     }
   }
 
