@@ -208,6 +208,54 @@ CREATE POLICY "Users can view own assets"
 
 ---
 
+## 8. `quotes` table
+
+Stores quote submissions from the `/configure` page.
+
+```sql
+CREATE TABLE IF NOT EXISTS public.quotes (
+  id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id          uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  tier             text NOT NULL,
+  addons           text[] NOT NULL DEFAULT '{}',
+  base_price       numeric(12, 2),
+  monthly_price    numeric(12, 2),
+  is_consultative  boolean NOT NULL DEFAULT false,
+  message          text,
+  status           text NOT NULL DEFAULT 'submitted'
+                     CHECK (status IN ('submitted', 'reviewing', 'proposal_sent', 'approved', 'in_progress', 'completed', 'declined')),
+  admin_notes      text,
+  submitted_at     timestamptz NOT NULL DEFAULT now(),
+  updated_at       timestamptz NOT NULL DEFAULT now()
+);
+
+DROP TRIGGER IF EXISTS quotes_updated_at ON public.quotes;
+CREATE TRIGGER quotes_updated_at
+  BEFORE UPDATE ON public.quotes
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+CREATE INDEX IF NOT EXISTS quotes_user_id_submitted_at
+  ON public.quotes (user_id, submitted_at DESC);
+
+ALTER TABLE public.quotes ENABLE ROW LEVEL SECURITY;
+
+-- Clients can view their own quotes
+CREATE POLICY "Users can view own quotes"
+  ON public.quotes FOR SELECT
+  USING (auth.uid() = user_id);
+
+-- Clients can submit quotes
+CREATE POLICY "Users can insert own quotes"
+  ON public.quotes FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+-- Service role (admin) can do everything — handled via supabase service key in admin panel
+```
+
+> **Note:** The admin panel uses the Supabase **service role key** (server-side only) to read and update all quotes across all users. The anon key is used for client-facing reads via RLS.
+
+---
+
 ## Sample data (for testing)
 
 Replace `YOUR_USER_ID` with a real user UUID from your `auth.users` table.

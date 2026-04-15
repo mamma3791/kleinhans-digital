@@ -29,7 +29,8 @@ export async function middleware(request: NextRequest) {
 
   if (!user && (
     request.nextUrl.pathname.startsWith("/dashboard") ||
-    request.nextUrl.pathname.startsWith("/onboarding")
+    request.nextUrl.pathname.startsWith("/onboarding") ||
+    request.nextUrl.pathname.startsWith("/admin")
   )) {
     const url = request.nextUrl.clone();
     url.pathname = "/configure";
@@ -40,5 +41,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/onboarding/:path*"],
+  matcher: ["/dashboard/:path*", "/onboarding/:path*", "/admin/:path*"],
 };
