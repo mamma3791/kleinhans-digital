@@ -1,3 +1,4 @@
+import React from "react";
 import { createClient } from "@/lib/supabase/server";
 
 const CATEGORY_MAP: Record<string, { label: string; bg: string; color: string }> = {
@@ -8,7 +9,7 @@ const CATEGORY_MAP: Record<string, { label: string; bg: string; color: string }>
   other:    { label: "Other",    bg: "rgba(245,244,239,0.07)", color: "rgba(245,244,239,0.4)" },
 };
 
-const CATEGORY_ICONS: Record<string, JSX.Element> = {
+const CATEGORY_ICONS: Record<string, React.ReactElement> = {
   design: (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/>
