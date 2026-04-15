@@ -2,8 +2,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
-const TALLY_URL = "https://tally.so/r/LZJ5ej";
-
 export default function Contact() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -21,23 +19,15 @@ export default function Contact() {
       email: data.get("email"),
       phone: data.get("phone"),
       message: data.get("message"),
-      tally_url: TALLY_URL,
       submitted_at: new Date().toISOString(),
     };
 
     try {
-      // Send to Web3Forms for email delivery
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: data,
-      });
-
-      // Fire to Make.com webhook via API route (non-blocking)
-      fetch("/api/quote-notify", {
+      const res = await fetch("/api/contact-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-      }).catch(() => {});
+      });
 
       if (res.ok) { setStatus("success"); form.reset(); }
       else setStatus("error");
@@ -231,8 +221,6 @@ export default function Contact() {
               </h3>
 
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.875rem" }}>
-                <input type="hidden" name="access_key" value="b24a2d57-dbe1-4e78-95ba-e7e877614684" />
-                <input type="hidden" name="subject" value="New enquiry from kleinhansdigital.co.za" />
 
                 <div className="kd-name-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.875rem" }}>
                   <input className="kd-input" name="name" type="text" placeholder="Your name" required />
