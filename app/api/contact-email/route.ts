@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     await resend.emails.send({
       from: FROM_ADDRESS,
       to: "info@kleinhansdigital.co.za",
-      reply_to: email,
+      replyTo: email,
       subject: `New Contact — ${name}${business ? ` (${business})` : ""}`,
       react: ContactFormEmail({
         name: name as string,
