@@ -23,7 +23,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   // If no ADMIN_USER_ID env var is set, check email as fallback
-  if (!ADMIN_USER_ID && user.email !== "jason@kleinhansdigital.co.za") {
+  if (!ADMIN_USER_ID && user.email !== "info@kleinhansdigital.co.za") {
     redirect("/dashboard");
   }
 

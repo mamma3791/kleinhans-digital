@@ -77,7 +77,7 @@ Placeholder structure for what the scenario likely does (update as needed):
    - `quote_submitted` → path A
    - *(no type field)* → path B (contact form)
 3. **Path A — Quote notification:**
-   - Send email to `jason@kleinhansdigital.co.za` with quote details
+   - Send email to `info@kleinhansdigital.co.za` with quote details
    - *(Optional)* Create a task in Notion / Trello / ClickUp
    - *(Optional)* Send WhatsApp message via Twilio or 360dialog
 4. **Path B — Contact form notification:**

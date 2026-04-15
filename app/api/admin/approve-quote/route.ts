@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   const isAdmin = ADMIN_USER_ID
     ? user.id === ADMIN_USER_ID
-    : user.email === "jason@kleinhansdigital.co.za";
+    : user.email === "info@kleinhansdigital.co.za";
 
   if (!isAdmin) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
