@@ -66,6 +66,11 @@ type Invoice = {
 
 type LineItem = { id: string; description: string; amount: string; type: "once_off" | "monthly" };
 
+type Message = {
+  id: string; user_id: string; sender: "client" | "agency";
+  content: string; read: boolean; created_at: string;
+};
+
 type Proposal = {
   id: string; user_id: string; quote_id: string | null;
   proposal_number: string; status: string; title: string;
@@ -83,6 +88,7 @@ type Props = {
   clients: Client[];
   invoices: Invoice[];
   proposals: Proposal[];
+  messages: Message[];
   nextInvoiceNumber: string;
   nextProposalNumber: string;
 };
@@ -110,9 +116,10 @@ function newLineItem(): LineItem {
 
 export default function AdminClient({
   initialQuotes, clients, invoices, proposals: initialProposals,
+  messages: initialMessages,
   nextInvoiceNumber, nextProposalNumber,
 }: Props) {
-  const [tab, setTab] = useState<"quotes" | "proposals" | "clients" | "invoices">("quotes");
+  const [tab, setTab] = useState<"quotes" | "proposals" | "clients" | "invoices" | "messages">("quotes");
   const [quotes, setQuotes] = useState<Quote[]>(initialQuotes);
   const [allInvoices, setAllInvoices] = useState<Invoice[]>(invoices);
   const [allProposals, setAllProposals] = useState<Proposal[]>(initialProposals);
@@ -151,6 +158,12 @@ export default function AdminClient({
   });
   const [propLoading, setPropLoading] = useState(false);
   const [propSuccess, setPropSuccess] = useState(false);
+
+  // ── Messages state ────────────────────────────────────────────────────────
+  const [allMessages, setAllMessages] = useState<Message[]>(initialMessages);
+  const [msgClientId, setMsgClientId] = useState<string | null>(null);
+  const [msgInput, setMsgInput] = useState("");
+  const [msgSending, setMsgSending] = useState(false);
 
   // ── Quote actions ──────────────────────────────────────────────────────────
 
@@ -268,6 +281,36 @@ export default function AdminClient({
     } catch { setError("Network error"); }
   };
 
+  // ── Message actions ────────────────────────────────────────────────────────
+
+  const sendReply = async () => {
+    if (!msgClientId || !msgInput.trim() || msgSending) return;
+    const content = msgInput.trim();
+    setMsgSending(true);
+    setMsgInput("");
+    // Optimistic
+    const tempId = `temp-${Date.now()}`;
+    setAllMessages(prev => [...prev, { id: tempId, user_id: msgClientId, sender: "agency", content, read: true, created_at: new Date().toISOString() }]);
+    try {
+      const res = await fetch("/api/admin/send-message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: msgClientId, content }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setAllMessages(prev => prev.filter(m => m.id !== tempId));
+        setError(data.error ?? "Failed to send message");
+      } else {
+        setAllMessages(prev => prev.map(m => m.id === tempId ? data.message : m));
+      }
+    } catch {
+      setAllMessages(prev => prev.filter(m => m.id !== tempId));
+      setError("Network error");
+    }
+    finally { setMsgSending(false); }
+  };
+
   // ── Proposal actions ───────────────────────────────────────────────────────
 
   const openProposalModal = (quote: Quote) => {
@@ -350,6 +393,10 @@ export default function AdminClient({
 
   // ── Computed ───────────────────────────────────────────────────────────────
 
+  const unreadClientCount = new Set(
+    allMessages.filter(m => m.sender === "client" && !m.read).map(m => m.user_id)
+  ).size;
+
   const propOnceOffTotal = propLineItems
     .filter(li => li.type === "once_off")
     .reduce((s, li) => s + Number(li.amount || 0), 0);
@@ -408,7 +455,7 @@ export default function AdminClient({
               </a>
             </h1>
             <p className="adm-sub" style={{ marginBottom: 0 }}>
-              {quotes.length} quote{quotes.length !== 1 ? "s" : ""} · {allProposals.length} proposal{allProposals.length !== 1 ? "s" : ""} · {clients.length} client{clients.length !== 1 ? "s" : ""} · {allInvoices.length} invoice{allInvoices.length !== 1 ? "s" : ""}
+              {quotes.length} quote{quotes.length !== 1 ? "s" : ""} · {allProposals.length} proposal{allProposals.length !== 1 ? "s" : ""} · {clients.length} client{clients.length !== 1 ? "s" : ""} · {allInvoices.length} invoice{allInvoices.length !== 1 ? "s" : ""}{unreadClientCount > 0 ? ` · ${unreadClientCount} unread message${unreadClientCount !== 1 ? "s" : ""}` : ""}
             </p>
           </div>
         </div>
@@ -426,6 +473,12 @@ export default function AdminClient({
           </button>
           <button className={`adm-tab${tab === "invoices" ? " active" : ""}`} onClick={() => setTab("invoices")}>
             Invoices {allInvoices.length > 0 && `(${allInvoices.length})`}
+          </button>
+          <button className={`adm-tab${tab === "messages" ? " active" : ""}`} onClick={() => setTab("messages")} style={{ position: "relative" }}>
+            Messages
+            {unreadClientCount > 0 && (
+              <span style={{ position: "absolute", top: "0.3rem", right: "0.3rem", width: "0.5rem", height: "0.5rem", borderRadius: "50%", background: "#e8a100" }} />
+            )}
           </button>
         </div>
 
@@ -749,6 +802,159 @@ export default function AdminClient({
             </div>
           )
         )}
+        {/* ── MESSAGES TAB ── */}
+        {tab === "messages" && (() => {
+          // Group messages by user_id
+          const clientsWithMessages = clients.filter(c =>
+            allMessages.some(m => m.user_id === c.user_id)
+          );
+          // Auto-select first client if none selected
+          const activeId = msgClientId ?? (clientsWithMessages[0]?.user_id ?? null);
+          const thread = allMessages.filter(m => m.user_id === activeId);
+
+          const formatMsgTime = (iso: string) => {
+            const d = new Date(iso);
+            const now = new Date();
+            const diffDays = Math.floor((now.getTime() - d.getTime()) / 86400000);
+            if (diffDays === 0) return d.toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" });
+            if (diffDays === 1) return "Yesterday";
+            if (diffDays < 7) return d.toLocaleDateString("en-ZA", { weekday: "short" });
+            return d.toLocaleDateString("en-ZA", { day: "numeric", month: "short" });
+          };
+
+          if (clientsWithMessages.length === 0) {
+            return <div className="adm-empty">No messages yet. Clients can send messages from their dashboard.</div>;
+          }
+
+          return (
+            <div style={{ display: "grid", gridTemplateColumns: "14rem 1fr", gap: "1rem", minHeight: "60vh" }}>
+              {/* Client list */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.375rem" }}>
+                {clientsWithMessages.map(c => {
+                  const unread = allMessages.filter(m => m.user_id === c.user_id && m.sender === "client" && !m.read).length;
+                  const lastMsg = [...allMessages].filter(m => m.user_id === c.user_id).pop();
+                  const isActive = (activeId === c.user_id);
+                  return (
+                    <button
+                      key={c.user_id}
+                      onClick={() => setMsgClientId(c.user_id)}
+                      style={{
+                        background: isActive ? "rgba(245,244,239,0.09)" : "rgba(245,244,239,0.04)",
+                        border: `1px solid ${isActive ? "rgba(245,244,239,0.15)" : "rgba(245,244,239,0.08)"}`,
+                        borderRadius: "0.75rem", padding: "0.75rem 0.875rem",
+                        textAlign: "left", cursor: "pointer", transition: "background 0.15s",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.25rem" }}>
+                        <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.825rem", fontWeight: 600, color: "#f5f4ef" }}>
+                          {c.business_name || c.full_name || c.user_email}
+                        </span>
+                        {unread > 0 && (
+                          <span style={{ background: "#e8a100", color: "#0a1510", fontSize: "0.65rem", fontWeight: 700, padding: "0.1rem 0.4rem", borderRadius: "9999px" }}>{unread}</span>
+                        )}
+                      </div>
+                      {lastMsg && (
+                        <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", color: "rgba(245,244,239,0.3)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {lastMsg.sender === "agency" ? "You: " : ""}{lastMsg.content}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Thread + reply */}
+              {activeId ? (
+                <div style={{ background: "rgba(245,244,239,0.03)", border: "1px solid rgba(245,244,239,0.08)", borderRadius: "1rem", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+                  {/* Thread header */}
+                  {(() => {
+                    const c = clients.find(cl => cl.user_id === activeId);
+                    return (
+                      <div style={{ padding: "1rem 1.25rem", borderBottom: "1px solid rgba(245,244,239,0.07)", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                        <div style={{ width: "2rem", height: "2rem", borderRadius: "50%", background: "#3a8a62", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 700, color: "#f5f4ef" }}>
+                          {(c?.business_name || c?.full_name || c?.user_email || "?")[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", fontWeight: 600, color: "#f5f4ef" }}>{c?.business_name || c?.full_name || c?.user_email}</div>
+                          <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.35)" }}>{c?.user_email}</div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Messages */}
+                  <div style={{ flex: 1, overflowY: "auto", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.625rem", maxHeight: "45vh" }}>
+                    {thread.length === 0 && (
+                      <div style={{ margin: "auto", fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "rgba(245,244,239,0.25)", textAlign: "center" }}>
+                        No messages yet
+                      </div>
+                    )}
+                    {thread.map((msg, idx) => {
+                      const showDate = idx === 0 || new Date(msg.created_at).toDateString() !== new Date(thread[idx - 1].created_at).toDateString();
+                      return (
+                        <div key={msg.id}>
+                          {showDate && (
+                            <div style={{ textAlign: "center", fontFamily: "var(--font-sans)", fontSize: "0.68rem", color: "rgba(245,244,239,0.2)", padding: "0.5rem 0" }}>
+                              {new Date(msg.created_at).toLocaleDateString("en-ZA", { weekday: "short", day: "numeric", month: "short" })}
+                            </div>
+                          )}
+                          <div style={{ display: "flex", flexDirection: "column", alignItems: msg.sender === "agency" ? "flex-end" : "flex-start", gap: "0.2rem" }}>
+                            <div style={{
+                              maxWidth: "75%", padding: "0.625rem 0.875rem", borderRadius: "1rem",
+                              borderBottomRightRadius: msg.sender === "agency" ? "0.2rem" : "1rem",
+                              borderBottomLeftRadius: msg.sender === "client" ? "0.2rem" : "1rem",
+                              background: msg.sender === "agency" ? "#3a8a62" : "rgba(245,244,239,0.08)",
+                              color: msg.sender === "agency" ? "#fff" : "rgba(245,244,239,0.85)",
+                              fontFamily: "var(--font-sans)", fontSize: "0.875rem", lineHeight: 1.6, wordBreak: "break-word",
+                            }}>
+                              {msg.content}
+                            </div>
+                            <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.65rem", color: "rgba(245,244,239,0.2)" }}>
+                              {formatMsgTime(msg.created_at)}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Reply input */}
+                  <div style={{ padding: "1rem 1.25rem", borderTop: "1px solid rgba(245,244,239,0.07)", display: "flex", gap: "0.625rem", alignItems: "flex-end" }}>
+                    <textarea
+                      value={msgInput}
+                      onChange={e => setMsgInput(e.target.value)}
+                      onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendReply(); } }}
+                      placeholder="Reply… (Enter to send, Shift+Enter for new line)"
+                      rows={1}
+                      style={{
+                        flex: 1, background: "rgba(245,244,239,0.06)", border: "1px solid rgba(245,244,239,0.1)",
+                        borderRadius: "0.625rem", padding: "0.625rem 0.875rem", color: "#f5f4ef",
+                        fontFamily: "var(--font-sans)", fontSize: "0.875rem", resize: "none",
+                        outline: "none", lineHeight: 1.5, minHeight: "2.5rem", maxHeight: "7rem",
+                      }}
+                    />
+                    <button
+                      onClick={sendReply}
+                      disabled={!msgInput.trim() || msgSending}
+                      style={{
+                        background: "#3a8a62", border: "none", borderRadius: "0.5rem",
+                        width: "2.5rem", height: "2.5rem", flexShrink: 0,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        cursor: !msgInput.trim() || msgSending ? "not-allowed" : "pointer",
+                        opacity: !msgInput.trim() || msgSending ? 0.4 : 1,
+                        transition: "opacity 0.15s",
+                      }}
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          );
+        })()}
       </div>
 
       {/* ── APPROVE MODAL ── */}

@@ -10,6 +10,7 @@ export default async function AdminPage() {
     { data: invoices },
     { data: projects },
     { data: proposals },
+    { data: messages },
   ] = await Promise.all([
     admin
       .from("quotes")
@@ -30,6 +31,10 @@ export default async function AdminPage() {
       .from("proposals")
       .select("id, user_id, quote_id, proposal_number, status, title, description, line_items, base_price, monthly_price, client_business_name, client_reg_number, client_vat_number, client_address, client_po_number, client_contact_name, client_signature_name, accepted_at, sent_at, expires_at, created_at")
       .order("created_at", { ascending: false }),
+    admin
+      .from("messages")
+      .select("id, user_id, sender, content, read, created_at")
+      .order("created_at", { ascending: true }),
   ]);
 
   // Resolve auth emails for all unique user IDs
@@ -85,6 +90,7 @@ export default async function AdminPage() {
       clients={clients}
       invoices={invoiceList}
       proposals={proposalList}
+      messages={messages ?? []}
       nextInvoiceNumber={nextInvoiceNumber}
       nextProposalNumber={nextProposalNumber}
     />
