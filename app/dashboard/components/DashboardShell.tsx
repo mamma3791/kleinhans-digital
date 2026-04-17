@@ -49,6 +49,15 @@ function IconQuote() {
     </svg>
   );
 }
+function IconProposal() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+    </svg>
+  );
+}
 function IconUser() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -68,13 +77,14 @@ function IconLogOut() {
 }
 
 const NAV_ITEMS = [
-  { href: "/dashboard",           label: "Overview",  icon: <IconGrid /> },
-  { href: "/dashboard/quotes",    label: "Quotes",    icon: <IconQuote /> },
-  { href: "/dashboard/projects",  label: "Projects",  icon: <IconFolder /> },
-  { href: "/dashboard/invoices",  label: "Invoices",  icon: <IconReceipt /> },
-  { href: "/dashboard/messages",  label: "Messages",  icon: <IconMessage /> },
-  { href: "/dashboard/assets",    label: "Assets",    icon: <IconFiles /> },
-  { href: "/dashboard/profile",   label: "Profile",   icon: <IconUser /> },
+  { href: "/dashboard",              label: "Overview",   icon: <IconGrid /> },
+  { href: "/dashboard/quotes",       label: "Quotes",     icon: <IconQuote /> },
+  { href: "/dashboard/proposals",    label: "Proposals",  icon: <IconProposal /> },
+  { href: "/dashboard/projects",     label: "Projects",   icon: <IconFolder /> },
+  { href: "/dashboard/invoices",     label: "Invoices",   icon: <IconReceipt /> },
+  { href: "/dashboard/messages",     label: "Messages",   icon: <IconMessage /> },
+  { href: "/dashboard/assets",       label: "Assets",     icon: <IconFiles /> },
+  { href: "/dashboard/profile",      label: "Profile",    icon: <IconUser /> },
 ];
 
 type Props = {
