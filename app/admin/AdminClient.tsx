@@ -52,6 +52,7 @@ type Invoice = {
   id: string; user_id: string; invoice_number: string;
   description: string; amount: number; status: string;
   due_date: string | null; created_at: string;
+  po_number?: string | null;
 };
 
 type Props = {
@@ -95,6 +96,7 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
   const [invNumber, setInvNumber] = useState(nextInvoiceNumber);
   const [invDescription, setInvDescription] = useState("");
   const [invAmount, setInvAmount] = useState("");
+  const [invPoNumber, setInvPoNumber] = useState("");
   const [invDueDate, setInvDueDate] = useState(() => {
     const d = new Date();
     d.setDate(d.getDate() + 7);
@@ -154,6 +156,7 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
     setInvoiceModal({ client });
     setInvDescription("");
     setInvAmount("");
+    setInvPoNumber("");
     setInvSuccess(false);
     // Recalculate next number based on current invoice list
     const year = new Date().getFullYear();
@@ -167,7 +170,7 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
     if (!invoiceModal) return;
     const client = invoiceModal.client;
     const name = client.business_name || client.full_name || client.user_email;
-    if (type === "deposit")  setInvDescription(`50% deposit — ${name}`);
+    if (type === "deposit")  setInvDescription(`20% deposit — ${name}`);
     if (type === "balance")  setInvDescription(`Balance due on completion — ${name}`);
     if (type === "retainer") setInvDescription(`Monthly retainer — ${name}`);
   };
@@ -186,6 +189,7 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
           description: invDescription,
           amount: invAmount,
           dueDate: invDueDate,
+          ...(invPoNumber.trim() ? { poNumber: invPoNumber.trim() } : {}),
         }),
       });
       const data = await res.json();
@@ -201,11 +205,25 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
           status: "sent",
           due_date: invDueDate,
           created_at: new Date().toISOString(),
+          po_number: invPoNumber.trim() || null,
         }, ...prev]);
         setInvSuccess(true);
       }
     } catch { setError("Network error"); }
     finally { setInvLoading(false); }
+  };
+
+  const markPaid = async (invoiceId: string) => {
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/update-invoice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invoiceId, status: "paid" }),
+      });
+      if (!res.ok) { const d = await res.json(); setError(d.error ?? "Failed to update"); }
+      else setAllInvoices(prev => prev.map(i => i.id === invoiceId ? { ...i, status: "paid" } : i));
+    } catch { setError("Network error"); }
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -246,7 +264,16 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
         {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "1.75rem", flexWrap: "wrap", gap: "1rem" }}>
           <div>
-            <h1 className="adm-title">Admin</h1>
+            <h1 className="adm-title" style={{ display: "flex", alignItems: "center", gap: "0.875rem" }}>
+              Admin
+              <a href="/" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "1.5px", textTransform: "uppercase", color: "rgba(245,244,239,0.3)", textDecoration: "none", padding: "0.3rem 0.6rem", borderRadius: "0.375rem", border: "1px solid rgba(245,244,239,0.08)", transition: "color 0.15s, border-color 0.15s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#f5f4ef"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(245,244,239,0.2)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,244,239,0.3)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(245,244,239,0.08)"; }}
+              >
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                View site
+              </a>
+            </h1>
             <p className="adm-sub" style={{ marginBottom: 0 }}>
               {quotes.length} quote{quotes.length !== 1 ? "s" : ""} · {clients.length} client{clients.length !== 1 ? "s" : ""} · {allInvoices.length} invoice{allInvoices.length !== 1 ? "s" : ""}
             </p>
@@ -420,14 +447,18 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
                       <div className="adm-label" style={{ marginBottom: "0.625rem" }}>Recent invoices</div>
                       <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                         {clientInvoices.slice(0, 3).map(inv => (
-                          <div key={inv.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
+                          <div key={inv.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
                             <div>
                               <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.35)", marginRight: "0.75rem" }}>{inv.invoice_number}</span>
                               <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8125rem", color: "rgba(245,244,239,0.6)" }}>{inv.description}</span>
                             </div>
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexShrink: 0 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
                               <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 600, color: "#f5f4ef" }}>R{Number(inv.amount).toLocaleString("en-ZA")}</span>
                               <Badge status={inv.status} map={INVOICE_STATUS} />
+                              <a href={`/admin/invoice/${inv.id}`} target="_blank" rel="noopener noreferrer" className="adm-btn adm-btn-ghost" style={{ fontSize: "0.7rem", padding: "0.25rem 0.55rem" }}>PDF</a>
+                              {(inv.status === "sent" || inv.status === "overdue") && (
+                                <button className="adm-btn adm-btn-green" style={{ fontSize: "0.7rem", padding: "0.25rem 0.55rem" }} onClick={() => markPaid(inv.id)}>Paid</button>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -482,9 +513,17 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
                           {inv.due_date ? ` · Due ${new Date(inv.due_date).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" })}` : ""}
                         </div>
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexShrink: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
                         <span style={{ fontFamily: "var(--font-sans)", fontSize: "1rem", fontWeight: 600, color: "#f5f4ef" }}>R{Number(inv.amount).toLocaleString("en-ZA")}</span>
                         <Badge status={inv.status} map={INVOICE_STATUS} />
+                        <a href={`/admin/invoice/${inv.id}`} target="_blank" rel="noopener noreferrer" className="adm-btn adm-btn-ghost" style={{ fontSize: "0.75rem", padding: "0.35rem 0.7rem" }}>
+                          View
+                        </a>
+                        {(inv.status === "sent" || inv.status === "overdue") && (
+                          <button className="adm-btn adm-btn-green" style={{ fontSize: "0.75rem", padding: "0.35rem 0.7rem" }} onClick={() => markPaid(inv.id)}>
+                            Mark paid
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -548,7 +587,7 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
                   <div className="adm-label" style={{ marginBottom: "0.5rem" }}>Quick fill</div>
                   <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
                     {[
-                      { key: "deposit" as const, label: "50% deposit" },
+                      { key: "deposit" as const, label: "20% deposit" },
                       { key: "balance" as const, label: "Balance due" },
                       { key: "retainer" as const, label: "Monthly retainer" },
                     ].map(({ key, label }) => (
@@ -573,9 +612,15 @@ export default function AdminClient({ initialQuotes, clients, invoices, nextInvo
                   </div>
                 </div>
 
-                <div style={{ marginBottom: "1.5rem" }}>
-                  <label className="adm-input-label">Invoice number</label>
-                  <input className="adm-input" value={invNumber} onChange={e => setInvNumber(e.target.value)} placeholder="INV-2026-001" />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.875rem", marginBottom: "1.5rem" }}>
+                  <div>
+                    <label className="adm-input-label">Invoice number</label>
+                    <input className="adm-input" value={invNumber} onChange={e => setInvNumber(e.target.value)} placeholder="INV-2026-001" />
+                  </div>
+                  <div>
+                    <label className="adm-input-label">PO number (optional)</label>
+                    <input className="adm-input" value={invPoNumber} onChange={e => setInvPoNumber(e.target.value)} placeholder="PO-12345" />
+                  </div>
                 </div>
 
                 {error && (

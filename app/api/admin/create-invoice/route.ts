@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
   if (!isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const { userId, description, amount, dueDate, invoiceNumber } = await request.json();
+  const { userId, description, amount, dueDate, invoiceNumber, poNumber } = await request.json();
 
   if (!userId || !description || !amount || !dueDate || !invoiceNumber) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
       amount: Number(amount),
       status: "sent",
       due_date: dueDate,
+      ...(poNumber ? { po_number: poNumber } : {}),
     })
     .select("id, invoice_number")
     .single();

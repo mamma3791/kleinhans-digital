@@ -19,7 +19,7 @@ export default async function AdminPage() {
       .select("id, full_name, business_name, phone, email"),
     admin
       .from("invoices")
-      .select("id, user_id, invoice_number, description, amount, status, due_date, created_at")
+      .select("id, user_id, invoice_number, description, amount, status, due_date, created_at, po_number")
       .order("created_at", { ascending: false }),
     admin
       .from("projects")
