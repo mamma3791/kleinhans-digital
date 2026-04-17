@@ -27,5 +27,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/dashboard");
   }
 
-  return <>{children}</>;
+  return (
+    <div style={{ minHeight: "100vh", background: "#0a1510", color: "#f5f4ef" }}>
+      {children}
+    </div>
+  );
 }
