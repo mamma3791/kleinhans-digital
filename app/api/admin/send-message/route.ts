@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       content: content.trim(),
       read: false,
     })
-    .select("id, sender, content, read, created_at")
+    .select("id, user_id, sender, content, read, created_at")
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
