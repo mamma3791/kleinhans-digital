@@ -28,6 +28,11 @@ export const metadata: Metadata = {
     description: "Custom websites for South African businesses. Mobile ready, SEO optimised, live in 14 days.",
     creator: "@kleinhans_digital",
   },
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
   alternates: {
     canonical: "https://kleinhansdigital.co.za",
   },
