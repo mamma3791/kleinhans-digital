@@ -30,7 +30,8 @@ export async function proxy(request: NextRequest) {
   if (!user && (
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/onboarding") ||
-    request.nextUrl.pathname.startsWith("/admin")
+    request.nextUrl.pathname.startsWith("/admin") ||
+    request.nextUrl.pathname.startsWith("/extract")
   )) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
@@ -41,5 +42,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/onboarding/:path*", "/admin/:path*"],
+  matcher: ["/dashboard/:path*", "/onboarding/:path*", "/admin/:path*", "/extract/:path*"],
 };
