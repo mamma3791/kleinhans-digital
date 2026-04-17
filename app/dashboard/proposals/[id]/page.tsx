@@ -1,6 +1,5 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import DashboardShell from "../../components/DashboardShell";
 import ProposalAcceptClient from "./ProposalAcceptClient";
 import Link from "next/link";
 
@@ -51,7 +50,7 @@ export default async function ProposalPage({ params }: { params: Promise<{ id: s
   const isExpired = expiryDate ? expiryDate < new Date() : false;
 
   return (
-    <DashboardShell userName={user.email ?? ""}>
+    <>
       <style>{`
         .kd-prop-page { padding: 2rem 2rem 5rem; max-width: 54rem; }
         .kd-prop-doc {
@@ -267,6 +266,6 @@ export default async function ProposalPage({ params }: { params: Promise<{ id: s
           ) : null}
         </div>
       </div>
-    </DashboardShell>
+    </>
   );
 }

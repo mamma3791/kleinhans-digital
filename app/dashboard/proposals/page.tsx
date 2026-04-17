@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import DashboardShell from "../components/DashboardShell";
 
 const STATUS_MAP: Record<string, { label: string; color: string; bg: string }> = {
   sent:     { label: "Action required",  color: "#e8a100",               bg: "rgba(232,161,0,0.12)" },
@@ -26,20 +25,8 @@ export default async function ProposalsPage() {
   const pending = list.filter(p => p.status === "sent");
 
   return (
-    <DashboardShell userName={user.email ?? ""}>
+    <>
       <style>{`
-        .kd-section-title {
-          font-family: var(--font-serif);
-          font-size: clamp(1.375rem, 2vw, 1.75rem);
-          color: var(--cream);
-          margin-bottom: 0.5rem;
-        }
-        .kd-section-sub {
-          font-family: var(--font-sans);
-          font-size: 0.875rem;
-          color: rgba(245,244,239,0.4);
-          margin-bottom: 2rem;
-        }
         .kd-prop-card {
           background: rgba(245,244,239,0.04);
           border: 1px solid rgba(245,244,239,0.08);
@@ -49,6 +36,7 @@ export default async function ProposalsPage() {
           text-decoration: none;
           display: block;
           transition: border-color 0.15s, background 0.15s;
+          color: inherit;
         }
         .kd-prop-card:hover { border-color: rgba(245,244,239,0.16); background: rgba(245,244,239,0.06); }
         .kd-prop-card.pending { border-color: rgba(232,161,0,0.3); background: rgba(232,161,0,0.04); }
@@ -57,8 +45,10 @@ export default async function ProposalsPage() {
       `}</style>
 
       <div style={{ padding: "2.25rem 2rem 4rem", maxWidth: "52rem" }}>
-        <h1 className="kd-section-title">Proposals</h1>
-        <p className="kd-section-sub">
+        <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.375rem, 2vw, 1.75rem)", color: "var(--cream)", marginBottom: "0.5rem" }}>
+          Proposals
+        </h1>
+        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "rgba(245,244,239,0.4)", marginBottom: "2rem" }}>
           {pending.length > 0
             ? `${pending.length} proposal${pending.length !== 1 ? "s" : ""} awaiting your acceptance`
             : "Your proposals from Kleinhans Digital"}
@@ -107,6 +97,6 @@ export default async function ProposalsPage() {
           })
         )}
       </div>
-    </DashboardShell>
+    </>
   );
 }
