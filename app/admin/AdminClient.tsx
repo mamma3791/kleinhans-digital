@@ -283,30 +283,32 @@ export default function AdminClient({
 
   // ── Message actions ────────────────────────────────────────────────────────
 
-  const sendReply = async () => {
-    if (!msgClientId || !msgInput.trim() || msgSending) return;
+  const sendReply = async (targetClientId: string) => {
+    if (!targetClientId || !msgInput.trim() || msgSending) return;
     const content = msgInput.trim();
     setMsgSending(true);
     setMsgInput("");
     // Optimistic
     const tempId = `temp-${Date.now()}`;
-    setAllMessages(prev => [...prev, { id: tempId, user_id: msgClientId, sender: "agency", content, read: true, created_at: new Date().toISOString() }]);
+    setAllMessages(prev => [...prev, { id: tempId, user_id: targetClientId, sender: "agency", content, read: true, created_at: new Date().toISOString() }]);
     try {
       const res = await fetch("/api/admin/send-message", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: msgClientId, content }),
+        body: JSON.stringify({ userId: targetClientId, content }),
       });
       const data = await res.json();
       if (!res.ok) {
         setAllMessages(prev => prev.filter(m => m.id !== tempId));
         setError(data.error ?? "Failed to send message");
+        setMsgInput(content); // restore input on failure
       } else {
         setAllMessages(prev => prev.map(m => m.id === tempId ? data.message : m));
       }
     } catch {
       setAllMessages(prev => prev.filter(m => m.id !== tempId));
       setError("Network error");
+      setMsgInput(content);
     }
     finally { setMsgSending(false); }
   };
@@ -923,7 +925,7 @@ export default function AdminClient({
                     <textarea
                       value={msgInput}
                       onChange={e => setMsgInput(e.target.value)}
-                      onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendReply(); } }}
+                      onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendReply(activeId); } }}
                       placeholder="Reply… (Enter to send, Shift+Enter for new line)"
                       rows={1}
                       style={{
@@ -934,7 +936,7 @@ export default function AdminClient({
                       }}
                     />
                     <button
-                      onClick={sendReply}
+                      onClick={() => sendReply(activeId)}
                       disabled={!msgInput.trim() || msgSending}
                       style={{
                         background: "#3a8a62", border: "none", borderRadius: "0.5rem",
