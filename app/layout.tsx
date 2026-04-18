@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Cursor from "./components/Cursor";
 import LenisProvider from "./components/LenisProvider";
@@ -64,7 +63,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LenisProvider />
         <Cursor />
         {children}
-        <Analytics />
       </body>
     </html>
   );
