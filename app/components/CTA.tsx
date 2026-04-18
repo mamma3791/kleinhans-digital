@@ -105,7 +105,7 @@ export default function CTA() {
                 letterSpacing: "-0.02em",
               }}
             >
-              Your business deserves<br />a website that <em>works.</em>
+              Ready to automate<br />the busywork<em>?</em>
             </motion.h2>
 
             <motion.p
@@ -122,7 +122,7 @@ export default function CTA() {
                 margin: "0 auto 2.5rem",
               }}
             >
-              From R6,500 once-off. Live in 14 days. Johannesburg based, available across South Africa.
+              Custom software and AI workflows for South African SMEs. Your data stays local, your team stays productive.
             </motion.p>
 
             <motion.div
@@ -132,13 +132,13 @@ export default function CTA() {
               style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "center" }}
             >
               <a href="#contact" className="kd-cta-primary">
-                Start a Project Today
+                Book a Consultation
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>
               <a href="#work" className="kd-cta-secondary">
-                View Our Work
+                See What We Build
               </a>
             </motion.div>
           </div>

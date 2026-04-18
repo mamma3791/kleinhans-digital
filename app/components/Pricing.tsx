@@ -4,72 +4,69 @@ import { useRef } from "react";
 
 const tiers = [
   {
-    name: "Starter",
+    name: "Website",
     price: "R6,500",
     monthly: "R650/mo",
-    tag: "Once off",
-    desc: "Everything you need to get online and look professional from day one.",
+    tag: "Digital presence",
+    desc: "A professional, intelligent website with built-in lead capture and analytics. The foundation for everything else.",
     features: [
-      "Up to 5 pages",
-      "Mobile first design",
+      "Custom-coded website (up to 5 pages)",
+      "Mobile first, SEO optimised",
+      "Smart contact forms with AI qualification",
       "WhatsApp integration",
-      "Contact form",
-      "Google My Business setup",
-      "SSL and hosting included",
-      "Basic on-page SEO",
+      "Google Analytics and Search Console",
+      "SSL, hosting, and maintenance included",
     ],
     cta: "Get started",
     featured: false,
   },
   {
-    name: "Growth",
-    price: "R12,000",
-    monthly: "R1,200/mo",
+    name: "AI Workflow",
+    price: "From R8,000",
+    monthly: "Monthly",
     tag: "Most popular",
-    desc: "For businesses ready to generate leads and track their online performance.",
+    desc: "Automate a specific business process with AI. Document extraction, data processing, or admin automation tailored to your workflow.",
     features: [
-      "Everything in Starter",
-      "Social media integration",
-      "Lead capture forms",
-      "Google Analytics setup",
-      "Looker Studio dashboard",
-      "SEO reporting",
-      "2 content revisions per month",
+      "One AI workflow fully built and deployed",
+      "Local AI model (your data stays private)",
+      "Integration with your existing tools",
+      "Staff training and onboarding",
+      "Review dashboard for human oversight",
+      "Monthly optimisation and support",
     ],
-    cta: "Get started",
+    cta: "Book a consultation",
     featured: true,
   },
   {
-    name: "Pro",
-    price: "R22,000",
-    monthly: "R2,200/mo",
-    tag: "Full service",
-    desc: "A complete digital presence with paid ads, automation, and a full sales funnel.",
+    name: "Full System",
+    price: "Let's talk",
+    monthly: "Consultative",
+    tag: "End to end",
+    desc: "Complete workflow automation across multiple processes. Intelligent website, AI workflows, client portal, and reporting in one platform.",
     features: [
-      "Everything in Growth",
-      "Full lead funnel build",
-      "Google Ads management",
-      "WhatsApp automation",
-      "E-commerce integration",
-      "Monthly strategy call",
-      "Priority turnaround",
+      "Multiple AI workflows",
+      "Custom client or staff portal",
+      "Automated reporting and alerts",
+      "On-premise AI deployment",
+      "Dedicated support and SLA",
+      "Monthly strategy and expansion planning",
     ],
-    cta: "Get started",
+    cta: "Book a consultation",
     featured: false,
   },
   {
     name: "Custom",
     price: "Let's talk",
-    monthly: "Consultative",
-    tag: "Tailored",
-    desc: "Not sure what you need, or need something outside the standard tiers? We will figure it out together.",
+    monthly: "Project based",
+    tag: "Bespoke",
+    desc: "Need something specific? Internal tools, system integrations, chatbots, or a product MVP. We will scope it together.",
     features: [
-      "Scaled-down or simplified builds",
-      "WhatsApp chatbot setup and automation",
-      "Landing page only builds",
-      "Multi-location or franchise sites",
-      "Ongoing retainer and support only",
-      "Anything that doesn't fit a standard package",
+      "Custom software development",
+      "API integrations and data pipelines",
+      "WhatsApp or Telegram chatbots",
+      "Legacy system modernisation",
+      "Product MVP development",
+      "Ongoing retainer available",
     ],
     cta: "Start a conversation",
     featured: false,
@@ -206,7 +203,7 @@ export default function Pricing() {
               marginBottom: "1rem",
             }}
           >
-            Simple, honest pricing.
+            Clear, honest pricing.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -222,7 +219,7 @@ export default function Pricing() {
               margin: "0 auto",
             }}
           >
-            Once-off build fee, then a low monthly retainer for hosting, maintenance, and updates. No surprises.
+            Websites are a once-off build plus monthly hosting. AI workflows are priced monthly based on scope. No hidden fees, no lock-in contracts.
           </motion.p>
         </div>
 
@@ -330,7 +327,7 @@ export default function Pricing() {
             marginTop: "2rem",
           }}
         >
-          All prices exclude VAT. 50% deposit required to begin. Monthly retainer starts from launch date.
+          All prices exclude VAT. 20% deposit required to begin. Pricing scales with your needs, not our margins.
         </motion.p>
       </div>
     </section>

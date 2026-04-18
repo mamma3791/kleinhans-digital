@@ -6,53 +6,53 @@ const services = [
   {
     icon: (
       <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
       </svg>
     ),
     tag: "Core Service",
-    title: "Web Design",
-    desc: "Custom-coded, mobile-first websites. No templates, no page builders. Every site is built specifically for your business from scratch.",
-    price: "From R6,500",
+    title: "AI Workflow Automation",
+    desc: "Replace repetitive manual work with AI that reads documents, processes data, and handles admin tasks. Your staff focuses on decisions, not data entry.",
+    price: "From R8,000/mo",
   },
   {
     icon: (
       <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
       </svg>
     ),
-    tag: "Visibility",
-    title: "SEO",
-    desc: "Built-in from day one. Google My Business setup, schema markup, keyword structure, and local search optimisation.",
+    tag: "Digital Presence",
+    title: "Intelligent Websites",
+    desc: "Not just a brochure. Websites with built-in AI: lead qualification, smart forms, automated follow-ups, and real-time analytics.",
   },
   {
     icon: (
       <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
       </svg>
     ),
-    tag: "Identity",
-    title: "Branding",
-    desc: "Logo, colour system, typography, and brand guidelines that make your business instantly recognisable.",
+    tag: "Bespoke",
+    title: "Custom Software",
+    desc: "Dashboards, client portals, internal tools, and integrations built specifically for how your business operates. No off-the-shelf compromises.",
   },
   {
     icon: (
       <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg>
     ),
-    tag: "Revenue",
-    title: "E-Commerce",
-    desc: "Online stores with product catalogues, WhatsApp checkout integration, and payment processing for the South African market.",
+    tag: "Intelligence",
+    title: "Document Extraction",
+    desc: "AI reads your waybills, invoices, quotes, and paperwork. Extracts every field, structures the data, and feeds it into your systems automatically.",
   },
   {
     icon: (
       <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
       </svg>
     ),
-    tag: "Automation",
-    title: "WhatsApp",
-    desc: "Click-to-chat buttons, pre-filled messages, and chatbot flows that turn enquiries into customers while you sleep.",
+    tag: "Privacy First",
+    title: "Local AI",
+    desc: "Your AI runs on your premises. No sensitive data leaves your organisation. Fully POPIA compliant, fully under your control.",
   },
 ];
 
@@ -145,7 +145,7 @@ export default function Services() {
                 margin: 0,
               }}
             >
-              Services that grow<br />your business.
+              Software that works<br />harder than people.
             </motion.h2>
 
             <motion.p
@@ -162,7 +162,7 @@ export default function Services() {
                 margin: 0,
               }}
             >
-              Every engagement starts with understanding your business, your customers, and what growth actually looks like for you.
+              We build AI-powered tools and custom software that automate the work your team does manually today. Less admin, more output, complete data privacy.
             </motion.p>
           </div>
         </div>
@@ -329,10 +329,10 @@ export default function Services() {
           transition={{ duration: 0.6, delay: 0.65 }}
         >
           {[
-            { num: "14", label: "Days average delivery" },
-            { num: "100%", label: "Custom built every time" },
-            { num: "R650", label: "Monthly retainer from" },
-            { num: "6+", label: "Sites launched" },
+            { num: "80%", label: "Reduction in manual work" },
+            { num: "100%", label: "Data stays on premises" },
+            { num: "3x", label: "Output with same team" },
+            { num: "0", label: "Sensitive data shared externally" },
           ].map((s, i) => (
             <div key={i} style={{ background: "var(--cream)", padding: "1.375rem 1rem", textAlign: "center" }}>
               <div style={{

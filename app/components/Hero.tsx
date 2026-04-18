@@ -86,7 +86,7 @@ function ParticleCanvas() {
   return <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />;
 }
 
-const words = ["Your business", "deserves a website", "that actually", "works."];
+const words = ["Software that", "runs your business", "while you", "grow it."];
 
 export default function Hero() {
   return (
@@ -130,7 +130,7 @@ export default function Hero() {
           >
             <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#5dbf88" }} />
             <span style={{ color: "#5dbf88", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "4px", textTransform: "uppercase" }}>
-              South African Digital Agency
+              Software Development + AI Workflows
             </span>
           </motion.div>
 
@@ -145,8 +145,8 @@ export default function Hero() {
                   className="text-hero"
                   style={{
                     fontFamily: "'DM Serif Display', serif",
-                    color: word === "works." ? "#5dbf88" : "#f5f4ef",
-                    fontStyle: word === "works." ? "italic" : "normal",
+                    color: word === "grow it." ? "#5dbf88" : "#f5f4ef",
+                    fontStyle: word === "grow it." ? "italic" : "normal",
                     display: "block",
                   }}
                 >
@@ -166,7 +166,7 @@ export default function Hero() {
               maxWidth: "36rem", marginBottom: "3rem", lineHeight: 1.8, fontWeight: 300,
             }}
           >
-            We build professional websites and digital systems that bring in enquiries, build trust, and grow with your business.
+            We build custom software and AI-powered workflows for South African SMEs. Automate the repetitive work, keep your data private, and scale without scaling your headcount.
           </motion.p>
 
           {/* CTAs */}
@@ -188,7 +188,7 @@ export default function Hero() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "#2a6647")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#3a8a62")}
             >
-              Start a Project
+              Book a Consultation
               <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -203,7 +203,7 @@ export default function Hero() {
                 textDecoration: "none", transition: "all 0.2s ease",
               }}
             >
-              See Our Work
+              See What We Build
             </Link>
           </motion.div>
 
@@ -215,9 +215,9 @@ export default function Hero() {
             style={{ display: "flex", flexWrap: "wrap" }}
           >
             {[
-              { num: "6+", label: "Businesses launched" },
-              { num: "14", label: "Day turnaround" },
-              { num: "100%", label: "Custom built" },
+              { num: "100%", label: "Your data stays local" },
+              { num: "80%", label: "Less manual work" },
+              { num: "Custom", label: "Built for your business" },
             ].map((stat, i) => (
               <div key={i} style={{
                 flex: "1 1 120px", padding: "1rem 1.5rem",

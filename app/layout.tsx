@@ -8,16 +8,16 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://kleinhansdigital.co.za"),
   title: {
     template: "%s | Kleinhans Digital",
-    default: "Web Design Johannesburg | Kleinhans Digital | Websites That Work",
+    default: "Software Development & AI Workflows | Kleinhans Digital | Johannesburg",
   },
-  description: "Kleinhans Digital builds custom websites for Johannesburg businesses. Mobile ready, SEO optimised, live in 14 days. From R6,500. No templates, no agencies.",
-  keywords: "web design Johannesburg, website design South Africa, SEO Johannesburg, small business website, web developer Johannesburg",
+  description: "Kleinhans Digital builds custom software and AI workflow automation for South African SMEs. Local AI deployment, complete data privacy, POPIA compliant.",
+  keywords: "AI workflow automation South Africa, custom software development Johannesburg, local AI deployment, process automation SME, POPIA compliant AI, document extraction",
   authors: [{ name: "Kleinhans Digital", url: "https://kleinhansdigital.co.za" }],
   creator: "Kleinhans Digital",
   publisher: "LRWKleinhans (Pty) Ltd",
   openGraph: {
-    title: "Web Design Johannesburg | Kleinhans Digital",
-    description: "Custom websites for South African businesses. Mobile ready, SEO optimised, live in 14 days. From R6,500.",
+    title: "Software Development & AI Workflows | Kleinhans Digital",
+    description: "Custom software and AI workflow automation for South African SMEs. Local AI, complete data privacy.",
     url: "https://kleinhansdigital.co.za",
     siteName: "Kleinhans Digital",
     locale: "en_ZA",
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Design Johannesburg | Kleinhans Digital",
-    description: "Custom websites for South African businesses. Mobile ready, SEO optimised, live in 14 days.",
+    title: "Software Development & AI Workflows | Kleinhans Digital",
+    description: "Custom software and AI workflow automation for South African SMEs. Local AI, complete data privacy.",
     creator: "@kleinhans_digital",
   },
   icons: {

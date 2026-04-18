@@ -17,7 +17,7 @@ const localBusinessSchema = {
   "@id": "https://kleinhansdigital.co.za/#business",
   "name": "Kleinhans Digital",
   "alternateName": "LRWKleinhans (Pty) Ltd",
-  "description": "Custom websites for South African businesses. Mobile ready, SEO optimised, live in 14 days. From R6,500. No templates, no agencies.",
+  "description": "Custom software development and AI workflow automation for South African SMEs. Local AI deployment, complete data privacy, POPIA compliant.",
   "url": "https://kleinhansdigital.co.za",
   "telephone": "+27662410344",
   "email": "info@kleinhansdigital.co.za",
@@ -36,7 +36,7 @@ const localBusinessSchema = {
     { "@type": "Country", "name": "South Africa" },
     { "@type": "City", "name": "Johannesburg" },
   ],
-  "priceRange": "R6,500 - R22,000+",
+  "priceRange": "R6,500 - R50,000+",
   "currenciesAccepted": "ZAR",
   "openingHoursSpecification": [
     {
@@ -51,12 +51,12 @@ const localBusinessSchema = {
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    "name": "Web Design & Digital Marketing Packages",
+    "name": "Software Development & AI Workflow Packages",
     "itemListElement": [
       {
         "@type": "Offer",
-        "name": "Starter Website Package",
-        "description": "Up to 5 pages, mobile-first design, WhatsApp integration, contact form, Google My Business setup, SSL and hosting, basic on-page SEO.",
+        "name": "Intelligent Website",
+        "description": "Custom-coded website with built-in AI lead qualification, smart forms, WhatsApp integration, SEO, and analytics.",
         "price": "6500",
         "priceCurrency": "ZAR",
         "priceSpecification": {
@@ -68,17 +68,15 @@ const localBusinessSchema = {
       },
       {
         "@type": "Offer",
-        "name": "Growth Website Package",
-        "description": "Everything in Starter plus social media integration, lead capture forms, Google Analytics, Looker Studio dashboard, SEO reporting.",
-        "price": "12000",
+        "name": "AI Workflow Automation",
+        "description": "Custom AI workflow for document extraction, process automation, or admin tasks. Local AI deployment, POPIA compliant.",
+        "price": "8000",
         "priceCurrency": "ZAR",
       },
       {
         "@type": "Offer",
-        "name": "Pro Website Package",
-        "description": "Full digital presence with lead funnel, Google Ads management, WhatsApp automation, e-commerce integration, monthly strategy call.",
-        "price": "22000",
-        "priceCurrency": "ZAR",
+        "name": "Full System",
+        "description": "End-to-end workflow automation with multiple AI processes, client portal, reporting, and on-premise AI deployment.",
       },
     ],
   },
@@ -90,7 +88,7 @@ const websiteSchema = {
   "@id": "https://kleinhansdigital.co.za/#website",
   "url": "https://kleinhansdigital.co.za",
   "name": "Kleinhans Digital",
-  "description": "Custom websites for South African businesses. Mobile ready, SEO optimised, live in 14 days.",
+  "description": "Custom software and AI workflow automation for South African SMEs. Local AI deployment, data privacy.",
   "publisher": {
     "@id": "https://kleinhansdigital.co.za/#business",
   },

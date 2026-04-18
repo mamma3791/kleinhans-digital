@@ -74,7 +74,7 @@ export default function Footer() {
               color: "rgba(245,244,239,0.32)",
               maxWidth: "18rem",
             }}>
-              Custom websites for South African businesses. Built from scratch, mobile ready, SEO optimised.
+              Custom software and AI workflow automation for South African businesses. Your data stays local.
             </p>
           </div>
 
@@ -83,14 +83,14 @@ export default function Footer() {
             <p className="kd-footer-label">Services</p>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
               {[
-                { label: "Web Design", slug: "web-design-johannesburg" },
-                { label: "SEO Optimisation", slug: "seo-optimisation-south-africa" },
-                { label: "Branding & Identity", slug: "branding-identity-small-business" },
-                { label: "E-Commerce", slug: "ecommerce-south-africa" },
-                { label: "WhatsApp Integration", slug: "whatsapp-integration-business" },
-                { label: "Google My Business", slug: "google-my-business-setup" },
+                { label: "AI Workflow Automation", href: "#services" },
+                { label: "Intelligent Websites", href: "#services" },
+                { label: "Custom Software", href: "#services" },
+                { label: "Document Extraction", href: "#services" },
+                { label: "Local AI Deployment", href: "#services" },
+                { label: "Process Automation", href: "#services" },
               ].map((s) => (
-                <a key={s.label} href={`/blog/${s.slug}`} className="kd-footer-link">{s.label}</a>
+                <a key={s.label} href={s.href} className="kd-footer-link">{s.label}</a>
               ))}
             </div>
           </div>

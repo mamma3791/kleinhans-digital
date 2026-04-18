@@ -140,7 +140,7 @@ export default function Contact() {
                 letterSpacing: "-0.02em",
               }}
             >
-              Let&apos;s build something that works.
+              Let&apos;s automate the busywork.
             </motion.h2>
 
             <motion.div
@@ -184,7 +184,7 @@ export default function Contact() {
             </motion.div>
 
             <motion.a
-              href="https://wa.me/27662410344?text=Hi%20Kleinhans%20Digital%2C%20I%27d%20like%20to%20enquire%20about%20a%20website."
+              href="https://wa.me/27662410344?text=Hi%20Kleinhans%20Digital%2C%20I%27d%20like%20to%20enquire%20about%20your%20AI%20workflow%20solutions."
               target="_blank"
               rel="noopener noreferrer"
               className="kd-wa-btn"
@@ -228,7 +228,7 @@ export default function Contact() {
                 </div>
                 <input className="kd-input" name="email" type="email" placeholder="Email address" required />
                 <input className="kd-input" name="phone" type="tel" placeholder="Phone number" />
-                <textarea className="kd-input" name="message" placeholder="Tell us about your business and what you need..." required />
+                <textarea className="kd-input" name="message" placeholder="Tell us about your business and what manual processes you would like to automate..." required />
 
                 <button type="submit" disabled={status === "loading"} className="kd-submit">
                   {status === "loading" ? "Sending..." : "Send Message"}

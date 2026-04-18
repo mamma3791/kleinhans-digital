@@ -3,10 +3,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const reasons = [
-  { num: "01", title: "Built from scratch, every time", desc: "No page builders, no templates, no shortcuts. Your site is written in clean code built specifically for your business." },
-  { num: "02", title: "You deal with a person, not a call centre", desc: "Direct access to the person who builds your site. Questions get answered. Changes get made. No ticket system." },
-  { num: "03", title: "Fast delivery without cutting corners", desc: "Most projects go from brief to live in under 14 days. Speed comes from experience and process, not from rushing." },
-  { num: "04", title: "SEO baked in from day one", desc: "Search visibility is not an afterthought. Schema markup, meta structure, Google My Business, and local SEO are built into every site." },
+  { num: "01", title: "Your data never leaves your building", desc: "We run AI models locally on your infrastructure. No data is sent to OpenAI, Google, or any third party. Fully POPIA compliant by design, not by policy." },
+  { num: "02", title: "Built for your workflow, not ours", desc: "We sit with your team, watch how they work, and build software that fits. No forcing your business into someone else's template." },
+  { num: "03", title: "You deal with a person, not a platform", desc: "Direct access to the person building your system. Questions get answered. Changes get made. No ticket queue, no support tiers." },
+  { num: "04", title: "Same AI, fraction of the cost", desc: "Enterprise platforms charge R50k+ for setup alone. We deliver the same capability at SME pricing because we build lean and deploy smart." },
 ];
 
 export default function WhyUs() {
@@ -90,7 +90,7 @@ export default function WhyUs() {
                 letterSpacing: "-0.02em",
               }}
             >
-              The difference is in the details.
+              Why businesses choose us.
             </motion.h2>
 
             <motion.p
@@ -106,7 +106,7 @@ export default function WhyUs() {
                 marginBottom: "2.25rem",
               }}
             >
-              Most web design businesses use templates and call it custom. We do not. That difference shows in how the site looks, how fast it loads, and how many enquiries it generates.
+              Most AI vendors send your data to the cloud and call it secure. We run models on your premises. That is a fundamental difference, not a feature checkbox.
             </motion.p>
 
             <motion.a
@@ -116,7 +116,7 @@ export default function WhyUs() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.3 }}
             >
-              Start a conversation
+              Book a consultation
               <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

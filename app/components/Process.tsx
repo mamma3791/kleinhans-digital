@@ -3,11 +3,11 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const steps = [
-  { num: "01", title: "Discovery", desc: "We learn about your business, your customers, and your goals. A clear brief means a better outcome." },
-  { num: "02", title: "Design", desc: "A custom design built around your brand. You review, give feedback, and we refine until it is right." },
-  { num: "03", title: "Development", desc: "Clean, fast code. Mobile ready. Built for search. Every integration tested thoroughly before launch." },
-  { num: "04", title: "Launch", desc: "We handle domain, hosting, and going live. Delivered on a global network, fast anywhere in the world." },
-  { num: "05", title: "Support", desc: "You are not on your own after launch. We are available for updates, changes, and growing your presence further." },
+  { num: "01", title: "Discovery", desc: "We sit with your team and watch how they work. We identify the repetitive, time-consuming tasks that AI can handle." },
+  { num: "02", title: "Design", desc: "We map out the workflow: what the AI handles, what humans review, and how it fits into your existing systems." },
+  { num: "03", title: "Build", desc: "Custom software, trained on your processes. We build, test, and iterate with your team until the output is reliable." },
+  { num: "04", title: "Deploy", desc: "AI runs on your premises or in a private environment. We handle the infrastructure so your data stays under your control." },
+  { num: "05", title: "Optimise", desc: "We monitor performance, fine-tune accuracy, and expand into new workflows as your team sees what is possible." },
 ];
 
 export default function Process() {
@@ -110,7 +110,7 @@ export default function Process() {
                 margin: 0,
               }}
             >
-              From brief to live<br />in 14 days.
+              From manual process<br />to automated workflow.
             </motion.h2>
           </div>
 
@@ -129,7 +129,7 @@ export default function Process() {
               flexShrink: 0,
             }}
           >
-            <span style={{ fontFamily: "var(--font-serif)", fontSize: "2rem", color: "var(--cream)" }}>14</span>
+            <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.5rem", color: "var(--cream)" }}>5</span>
           </motion.div>
         </div>
 

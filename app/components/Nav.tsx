@@ -27,9 +27,9 @@ export default function Nav() {
 
   const navItems = [
     { label: "Services", href: "#services" },
-    { label: "Work", href: "#work" },
     { label: "Process", href: "#process" },
     { label: "Pricing", href: "#pricing" },
+    { label: "Work", href: "#work" },
     { label: "Blog", href: "/blog" },
   ];
 
@@ -157,7 +157,7 @@ export default function Nav() {
                 Sign in
               </Link>
             )}
-            <a href="/configure" className="kd-nav-cta">Get a Quote</a>
+            <a href="/configure" className="kd-nav-cta">Get Started</a>
           </div>
 
           {/* Mobile hamburger */}
@@ -197,7 +197,7 @@ export default function Nav() {
               </Link>
             )}
             <a href="/configure" onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: "1rem", background: "var(--green)", color: "var(--cream)", fontFamily: "var(--font-sans)", fontWeight: 600, padding: "0.875rem", borderRadius: "9999px", textDecoration: "none" }}>
-              Get a Quote
+              Get Started
             </a>
           </motion.div>
         )}
