@@ -3,6 +3,7 @@ import { PortableText } from "@portabletext/react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Nav from "../../components/Nav";
 
 export const revalidate = 60;
 
@@ -188,26 +189,10 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      {/* Nav */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--cream)", borderBottom: "1px solid rgba(45,106,79,0.1)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none" }} aria-label="Kleinhans Digital home">
-          <div style={{ width: "2rem", height: "2rem", borderRadius: "0.5rem", background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-              <path d="M2 9L9 2L16 9L9 16L2 9Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-              <path d="M9 5.5L12.5 9L9 12.5L5.5 9L9 5.5Z" fill="white" opacity="0.7"/>
-            </svg>
-          </div>
-          <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.9375rem", color: "var(--dark)" }}>
-            Kleinhans<span style={{ color: "var(--green3)" }}>.</span>Digital
-          </span>
-        </Link>
-        <Link href="/blog" style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--muted)", textDecoration: "none" }}>
-          All posts
-        </Link>
-      </nav>
+      <Nav />
 
       {/* Article */}
-      <article style={{ maxWidth: "44rem", margin: "0 auto", padding: "4rem 1.5rem 6rem" }}>
+      <article style={{ maxWidth: "44rem", margin: "0 auto", padding: "7rem 1.5rem 6rem" }}>
 
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" style={{ marginBottom: "2rem" }}>

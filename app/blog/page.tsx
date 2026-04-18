@@ -1,21 +1,22 @@
 import { sanityClient, queries } from "@/sanity/client";
 import Link from "next/link";
 import type { Metadata } from "next";
+import Nav from "../components/Nav";
 
 export const metadata: Metadata = {
-  title: "Blog — Web Design & SEO Insights for SA Businesses",
-  description: "Practical guides on web design, SEO, and digital marketing for South African businesses. Written by Kleinhans Digital, Johannesburg.",
+  title: "Blog — Software, AI & Automation Insights for SA Businesses",
+  description: "Practical guides on AI workflows, software development, and automation for South African businesses. Written by Kleinhans Digital, Johannesburg.",
   alternates: { canonical: "https://kleinhansdigital.co.za/blog" },
   openGraph: {
     title: "Blog | Kleinhans Digital",
-    description: "Practical guides on web design, SEO, and digital marketing for South African businesses.",
+    description: "Practical guides on AI workflows, software development, and automation for South African businesses.",
     url: "https://kleinhansdigital.co.za/blog",
     type: "website",
   },
   twitter: {
     card: "summary",
     title: "Blog | Kleinhans Digital",
-    description: "Practical guides on web design, SEO, and digital marketing for South African businesses.",
+    description: "Practical guides on AI workflows, software development, and automation for South African businesses.",
   },
 };
 
@@ -84,25 +85,9 @@ export default async function BlogPage() {
         }
       `}</style>
 
-      {/* Nav */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 50, background: "var(--cream)", borderBottom: "1px solid rgba(45,106,79,0.1)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none" }}>
-          <div style={{ width: "2rem", height: "2rem", borderRadius: "0.5rem", background: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-              <path d="M2 9L9 2L16 9L9 16L2 9Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-              <path d="M9 5.5L12.5 9L9 12.5L5.5 9L9 5.5Z" fill="white" opacity="0.7"/>
-            </svg>
-          </div>
-          <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.9375rem", color: "var(--dark)" }}>
-            Kleinhans<span style={{ color: "var(--green3)" }}>.</span>Digital
-          </span>
-        </Link>
-        <Link href="/" style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--muted)", textDecoration: "none" }}>
-          Back to site
-        </Link>
-      </nav>
+      <Nav />
 
-      <div className="kd-container" style={{ padding: "5rem 1.5rem" }}>
+      <div className="kd-container" style={{ padding: "8rem 1.5rem 5rem" }}>
 
         {/* Header */}
         <div style={{ maxWidth: "40rem", marginBottom: "4rem" }}>
@@ -110,10 +95,10 @@ export default async function BlogPage() {
             Resources
           </p>
           <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2.2rem, 4vw, 3.5rem)", color: "var(--dark)", letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "1rem" }}>
-            Insights for SA business owners.
+            Insights for SA businesses.
           </h1>
           <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "1rem", lineHeight: 1.75, color: "var(--muted)" }}>
-            Practical guides on web design, SEO, and digital marketing for South African businesses.
+            Practical guides on AI workflows, software development, and automation for South African businesses.
           </p>
         </div>
 

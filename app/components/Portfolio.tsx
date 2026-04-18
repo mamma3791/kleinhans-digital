@@ -4,49 +4,49 @@ import { useRef, useState } from "react";
 
 const projects = [
   {
-    tag: "Fashion · Web Design",
-    title: "Shevans Luxury Streetwear",
-    desc: "Premium streetwear brand site with an immersive product showcase, bold editorial layout, and mobile optimised shopping experience built for the SA market.",
-    url: "https://shevans.kleinhansdigital.co.za",
-    accent: "#00d4ff",
-    bg: "#0a0a0a",
-  },
-  {
-    tag: "Corporate · Web Design",
+    tag: "Corporate · Intelligent Website",
     title: "LRW Group",
-    desc: "Clean, authoritative holding company site with a clear services showcase, strong brand presence, and professional tone aimed at investors and partners.",
+    desc: "Holding company platform with clear services architecture, investor-focused design, and integrated contact workflows.",
     url: "https://lrwgroup.kleinhansdigital.co.za",
     accent: "#c9a84c",
     bg: "#111010",
   },
   {
-    tag: "E-Commerce · Branding",
+    tag: "E-Commerce · Custom Software",
     title: "Drip King",
-    desc: "Fully featured streetwear online store with product catalogue, shopping cart, brand identity, and a dark editorial aesthetic built for the right audience.",
+    desc: "Full e-commerce platform with product management, shopping cart, payment processing, and brand identity system built from scratch.",
     url: "https://dripking.kleinhansdigital.co.za",
     accent: "#e85d04",
     bg: "#0d0d0d",
   },
   {
-    tag: "Retail · Web Design + SEO",
+    tag: "Fashion · Digital Platform",
+    title: "Shevans Luxury Streetwear",
+    desc: "Product showcase platform with immersive editorial layout and mobile-optimised shopping experience for the SA market.",
+    url: "https://shevans.kleinhansdigital.co.za",
+    accent: "#00d4ff",
+    bg: "#0a0a0a",
+  },
+  {
+    tag: "Retail · Web + SEO",
     title: "Bok Ballas Vapes",
-    desc: "Bold retail site with product showcase, location finder, and local SEO to drive walk-in traffic. Designed to be found and to convert.",
+    desc: "Retail platform with product catalogue, location finder, and local SEO to drive walk-in traffic. Built to convert.",
     url: "https://bokballas.kleinhansdigital.co.za",
     accent: "#4caf50",
     bg: "#0a1a0f",
   },
   {
-    tag: "Hospitality · Web Design",
+    tag: "Hospitality · Booking Platform",
     title: "De Kleine Kaap",
-    desc: "Warm Cape Dutch guest house site with WhatsApp booking integration, a lightbox gallery, and mobile first design for a Lady Grey property.",
+    desc: "Guest house platform with WhatsApp booking integration, lightbox gallery, and mobile-first design for a Lady Grey property.",
     url: "https://de-kleine-kaap.kleinhansdigital.co.za",
     accent: "#d4a853",
     bg: "#1a1209",
   },
   {
-    tag: "Pet Services · Web Design",
+    tag: "Services · Lead Generation",
     title: "Jess's Pet Sitting",
-    desc: "A warm, professional website for a pet sitting service built to reassure pet owners and make booking effortless.",
+    desc: "Service booking platform with automated enquiry handling and client trust-building design.",
     url: "https://jess.kleinhansdigital.co.za",
     accent: "#ff85a1",
     bg: "#1a0f14",
@@ -208,7 +208,7 @@ export default function Portfolio() {
               transition={{ delay: 0.1 }}
               style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2.2rem, 4vw, 3.5rem)", color: "var(--cream)", letterSpacing: "-0.02em", lineHeight: 1.1, margin: 0 }}
             >
-              Projects we are<br />proud of.
+              Recent builds.
             </motion.h2>
           </div>
           <motion.p
@@ -217,7 +217,7 @@ export default function Portfolio() {
             transition={{ delay: 0.2 }}
             style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.875rem", lineHeight: 1.7, color: "rgba(245,244,239,0.45)", maxWidth: "18rem", margin: 0 }}
           >
-            Businesses taken from no online presence to a digital home they are proud to share.
+            A sample of the websites and platforms we have built. AI workflow demos available on request.
           </motion.p>
         </div>
 
