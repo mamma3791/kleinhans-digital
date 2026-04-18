@@ -137,7 +137,7 @@ export default function Hero() {
           {/* Headline — wrapped in h1 for SEO; inner spans preserve line-by-line animation */}
           <h1 style={{ marginBottom: "2rem" }}>
             {words.map((word, i) => (
-              <span key={i} style={{ overflow: "hidden", display: "block", paddingBottom: "0.25em", marginBottom: "-0.15em" }}>
+              <span key={i} style={{ overflow: "hidden", display: "block", padding: "0 0.15em 0.3em", margin: "0 -0.15em -0.2em" }}>
                 <motion.span
                   initial={{ y: 80, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}

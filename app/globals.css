@@ -105,7 +105,7 @@ p, span, a, button, input, textarea, li, label { font-family: var(--font-sans); 
 /* ── Responsive text ── */
 .text-hero {
   font-size: clamp(2.8rem, 5.5vw, 5.5rem);
-  line-height: 1.0;
+  line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
