@@ -137,8 +137,8 @@ export default function CTA() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>
-              <a href="#work" className="kd-cta-secondary">
-                See What We Build
+              <a href="#demo" className="kd-cta-secondary">
+                Try the Demo
               </a>
             </motion.div>
           </div>

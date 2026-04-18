@@ -29,7 +29,7 @@ export default function Nav() {
     { label: "Services", href: "#services" },
     { label: "Process", href: "#process" },
     { label: "Pricing", href: "#pricing" },
-    { label: "Work", href: "#work" },
+    { label: "Demo", href: "#demo" },
     { label: "Blog", href: "/blog" },
   ];
 

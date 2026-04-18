@@ -3,7 +3,7 @@ import Hero from "./components/Hero";
 import Ticker from "./components/Ticker";
 import Services from "./components/Services";
 import WhyUs from "./components/WhyUs";
-import Portfolio from "./components/Portfolio";
+import Demo from "./components/Demo";
 import Process from "./components/Process";
 import Pricing from "./components/Pricing";
 import CTA from "./components/CTA";
@@ -112,7 +112,7 @@ export default function Home() {
         <Ticker />
         <Services />
         <WhyUs />
-        <Portfolio />
+        <Demo />
         <Process />
         <Pricing />
         <CTA />
