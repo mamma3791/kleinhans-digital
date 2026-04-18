@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
@@ -46,10 +45,6 @@ export async function POST(request: Request) {
   if (!GROQ_API_KEY) {
     return NextResponse.json({ error: "GROQ_API_KEY not configured" }, { status: 500 });
   }
-
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const formData = await request.formData();
   const file = formData.get("file") as File | null;
