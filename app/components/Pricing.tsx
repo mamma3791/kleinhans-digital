@@ -312,7 +312,7 @@ export default function Pricing() {
 
               {/* CTA */}
               <a
-                href={`/configure?tier=${tier.name.toLowerCase()}`}
+                href={`/configure?tier=${tier.name.toLowerCase().replace(/\s+/g, "_")}`}
                 className={`kd-price-cta ${tier.featured ? "dark" : "light"}`}
               >
                 {tier.cta}

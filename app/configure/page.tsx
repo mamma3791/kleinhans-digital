@@ -4,37 +4,103 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
-const tiers = [
+type TierType = "website" | "ai";
+
+interface Tier {
+  id: string;
+  name: string;
+  type: TierType;
+  basePrice: number | null;
+  monthly: number | null;
+  desc: string;
+  features: string[];
+  includedAddons: string[];
+  consultative: boolean;
+}
+
+const tiers: Tier[] = [
   {
-    id: "starter",
-    name: "Starter",
+    id: "intelligent_website",
+    name: "Intelligent Website",
+    type: "website",
     basePrice: 6500,
     monthly: 650,
-    desc: "Get online professionally from day one.",
-    features: ["Up to 5 pages", "Mobile first design", "WhatsApp integration", "Contact form", "Google My Business setup", "SSL and hosting", "Basic SEO"],
-    includedAddons: [] as string[],
+    desc: "A website that qualifies leads, automates follow-ups, and reports on performance.",
+    features: [
+      "Custom-coded, mobile-first website",
+      "AI-powered lead qualification forms",
+      "Automated email follow-ups on enquiries",
+      "WhatsApp click-to-chat with pre-filled messages",
+      "Real-time analytics dashboard",
+      "SEO optimised with schema markup",
+      "Client portal with login",
+      "SSL, hosting, backups, and maintenance",
+    ],
+    includedAddons: [],
+    consultative: false,
   },
   {
-    id: "growth",
-    name: "Growth",
-    basePrice: 12000,
-    monthly: 1200,
-    desc: "Generate leads and track your performance.",
-    features: ["Everything in Starter", "Social media integration", "Lead capture forms", "Google Analytics", "Looker Studio dashboard", "SEO reporting", "2 revisions/month"],
-    includedAddons: ["seo_reporting", "lead_funnel"] as string[],
+    id: "ai_workflow",
+    name: "AI Workflow",
+    type: "ai",
+    basePrice: 8000,
+    monthly: 8000,
+    desc: "We automate one of your manual, repetitive business processes with AI. The model runs locally on your premises.",
+    features: [
+      "Full workflow audit with your team",
+      "Custom AI pipeline (document extraction, data processing, or admin automation)",
+      "Integrates with your existing tools (email, WhatsApp, Sage, Xero, Excel)",
+      "Local AI model deployed on your premises",
+      "Review dashboard for human oversight",
+      "Staff training and onboarding included",
+      "POPIA compliant by design",
+      "Monthly optimisation, monitoring, and support",
+    ],
+    includedAddons: [],
+    consultative: true,
   },
   {
-    id: "pro",
-    name: "Pro",
-    basePrice: 22000,
-    monthly: 2200,
-    desc: "Full digital presence with automation.",
-    features: ["Everything in Growth", "Full lead funnel", "WhatsApp automation setup", "E-commerce integration", "Monthly strategy call", "Priority turnaround", "Monthly SEO reporting"],
-    includedAddons: ["seo_reporting", "lead_funnel", "ecommerce"] as string[],
+    id: "full_platform",
+    name: "Full Platform",
+    type: "ai",
+    basePrice: 18000,
+    monthly: 18000,
+    desc: "Multiple AI workflows, a custom portal, automated reporting, and a website that drives it all.",
+    features: [
+      "Everything in AI Workflow",
+      "Multiple automated processes",
+      "Custom client or staff portal",
+      "Automated invoicing and payment tracking",
+      "Real-time reporting and anomaly alerts",
+      "On-premise AI deployment with SLA",
+      "Dedicated account manager",
+      "Monthly strategy sessions for expansion",
+    ],
+    includedAddons: [],
+    consultative: true,
+  },
+  {
+    id: "custom_build",
+    name: "Custom Build",
+    type: "ai",
+    basePrice: null,
+    monthly: null,
+    desc: "Internal tools, system integrations, chatbots, or a full product MVP. If you can describe it, we can build it.",
+    features: [
+      "Custom software development from scratch",
+      "API integrations and data pipelines",
+      "WhatsApp, Telegram, or web chatbots",
+      "Legacy system modernisation",
+      "Product MVP for startups",
+      "E-commerce with AI-powered recommendations",
+      "Ongoing retainer and support available",
+    ],
+    includedAddons: [],
+    consultative: true,
   },
 ];
 
-const addons = [
+const websiteAddons = [
   { id: "extra_pages", label: "Additional pages (per 5)", price: 2000, consultative: false },
   { id: "ecommerce", label: "E-commerce store", price: 5000, consultative: false },
   { id: "lead_funnel", label: "Lead funnel and landing page", price: 3000, consultative: false },
@@ -42,23 +108,44 @@ const addons = [
   { id: "branding", label: "Branding and logo design", price: 0, consultative: true },
   { id: "whatsapp_bot", label: "WhatsApp chatbot", price: 0, consultative: true },
   { id: "google_ads", label: "Google Ads management", price: 0, consultative: true },
-  { id: "photography", label: "Product or business photography", price: 0, consultative: true },
-  { id: "multilocation", label: "Multi-location or franchise site", price: 0, consultative: true },
   { id: "copywriting", label: "Professional copywriting", price: 0, consultative: true },
   { id: "maintenance", label: "Ongoing maintenance and support retainer", price: 0, consultative: true },
 ];
+
+const aiAddons = [
+  { id: "extra_workflow", label: "Additional AI workflow (per workflow)", price: 0, consultative: true },
+  { id: "browser_automation", label: "Browser automation (AI operates your existing software)", price: 0, consultative: true },
+  { id: "email_automation", label: "Email classification and auto-reply", price: 0, consultative: true },
+  { id: "document_extraction", label: "Document scanning and data extraction (OCR + AI)", price: 0, consultative: true },
+  { id: "whatsapp_integration", label: "WhatsApp integration", price: 0, consultative: true },
+  { id: "client_portal", label: "Client-facing portal or dashboard", price: 0, consultative: true },
+  { id: "reporting", label: "Automated reporting and alerts", price: 0, consultative: true },
+  { id: "website_bundle", label: "Bundle with Intelligent Website", price: 6500, consultative: false },
+];
+
+const tierAliases: Record<string, string> = {
+  "starter": "intelligent_website",
+  "growth": "intelligent_website",
+  "pro": "intelligent_website",
+  "intelligent website": "intelligent_website",
+  "ai workflow": "ai_workflow",
+  "full platform": "full_platform",
+  "custom build": "custom_build",
+  "custom": "custom_build",
+};
 
 function ConfigureContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const supabase = createClient();
 
-  const initialTier = searchParams.get("tier") || "starter";
+  const rawTier = searchParams.get("tier") || "intelligent_website";
+  const resolvedTier = tierAliases[rawTier] || rawTier;
   const initialAddons = searchParams.get("addons")?.split(",").filter(Boolean) || [];
   const initialMessage = searchParams.get("message") || "";
   const autosubmit = searchParams.get("autosubmit");
 
-  const [selectedTier, setSelectedTier] = useState(initialTier);
+  const [selectedTier, setSelectedTier] = useState(resolvedTier);
   const [selectedAddons, setSelectedAddons] = useState<string[]>(initialAddons);
   const [user, setUser] = useState<{ id: string; email?: string; user_metadata?: { full_name?: string } } | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -76,15 +163,6 @@ function ConfigureContent() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Auto-tick included addons when tier changes — but only if user hasn't restored from URL
-  useEffect(() => {
-    if (initialAddons.length === 0) {
-      const tier = tiers.find(t => t.id === selectedTier);
-      if (tier) setSelectedAddons(tier.includedAddons);
-    }
-  }, [selectedTier]);
-
-  // Auto-submit when returning from OAuth with a saved quote
   useEffect(() => {
     if (user && autosubmit === "1" && !hasAutoSubmitted.current && !submitted) {
       hasAutoSubmitted.current = true;
@@ -94,28 +172,28 @@ function ConfigureContent() {
   }, [user]);
 
   const tier = tiers.find(t => t.id === selectedTier) || tiers[0];
+  const addons = tier.type === "website" ? websiteAddons : aiAddons;
   const isIncluded = (id: string) => tier.includedAddons.includes(id);
 
-  const calcPrice = (overrideTier?: string, overrideAddons?: string[]) => {
-    const t = tiers.find(x => x.id === (overrideTier || selectedTier)) || tiers[0];
-    let base = t.basePrice;
-    const monthly = t.monthly;
-    let consultative = false;
-    (overrideAddons || selectedAddons).forEach(id => {
-      if (t.includedAddons.includes(id)) return;
+  const calcPrice = () => {
+    let base = tier.basePrice || 0;
+    const monthly = tier.monthly || 0;
+    let hasConsultative = tier.consultative;
+    selectedAddons.forEach(id => {
+      if (tier.includedAddons.includes(id)) return;
       const addon = addons.find(a => a.id === id);
       if (addon) {
-        if (addon.consultative) { consultative = true; }
+        if (addon.consultative) { hasConsultative = true; }
         else { base += addon.price; }
       }
     });
-    return { base, monthly, consultative };
+    return { base, monthly, consultative: hasConsultative };
   };
 
   const { base, monthly, consultative } = calcPrice();
 
   const toggleAddon = (id: string) => {
-    if (isIncluded(id)) return; // can't deselect included addons
+    if (isIncluded(id)) return;
     setSelectedAddons(prev =>
       prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
     );
@@ -157,7 +235,7 @@ function ConfigureContent() {
           tier: selectedTier,
           addons: selectedAddons,
           base_price: consultative ? "Consultative" : `R${base.toLocaleString()}`,
-          monthly_price: `R${monthly.toLocaleString()}/mo`,
+          monthly_price: monthly ? `R${monthly.toLocaleString()}/mo` : "TBC",
           message,
         }),
       }).catch(() => {});
@@ -175,9 +253,14 @@ function ConfigureContent() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "2rem", color: "var(--dark)", marginBottom: "1rem" }}>Quote submitted.</h1>
+          <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "2rem", color: "var(--dark)", marginBottom: "1rem" }}>
+            {tier.consultative ? "Consultation request submitted." : "Quote submitted."}
+          </h1>
           <p style={{ fontFamily: "var(--font-sans)", color: "var(--muted)", lineHeight: 1.7, marginBottom: "2rem" }}>
-            We will review your brief and be in touch within 24 hours to discuss next steps.
+            {tier.consultative
+              ? "We will review your requirements and schedule a consultation within 24 hours to scope the project and confirm pricing."
+              : "We will review your brief and be in touch within 24 hours to discuss next steps."
+            }
           </p>
           <Link href="/dashboard" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "var(--green)", color: "var(--cream)", fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.875rem", padding: "0.875rem 1.75rem", borderRadius: "9999px", textDecoration: "none" }}>
             Go to your dashboard
@@ -253,7 +336,10 @@ function ConfigureContent() {
           .kd-cfg-layout { grid-template-columns: 1fr !important; }
           .kd-cfg-sticky { position: static !important; }
         }
-        @media (max-width: 639px) {
+        @media (max-width: 767px) {
+          .kd-cfg-tiers { grid-template-columns: 1fr 1fr !important; }
+        }
+        @media (max-width: 479px) {
           .kd-cfg-tiers { grid-template-columns: 1fr !important; }
         }
       `}</style>
@@ -283,13 +369,16 @@ function ConfigureContent() {
       <div className="kd-container" style={{ padding: "3rem 1.5rem" }}>
         <div style={{ marginBottom: "3rem" }}>
           <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.68rem", fontWeight: 600, letterSpacing: "4px", textTransform: "uppercase", color: "var(--green)", marginBottom: "0.75rem" }}>
-            Build your quote
+            {tier.type === "ai" ? "Request a consultation" : "Build your quote"}
           </p>
           <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem, 4vw, 3rem)", color: "var(--dark)", lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: "0.75rem" }}>
-            Configure your project.
+            {tier.type === "ai" ? "Tell us what you need." : "Configure your project."}
           </h1>
           <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.975rem", color: "var(--muted)", lineHeight: 1.7 }}>
-            Select a base package and add extras. Included features are pre-selected. Your price updates in real time.
+            {tier.type === "ai"
+              ? "Select your package, tell us about your workflows, and we will scope it properly in a consultation."
+              : "Select a base package and add extras. Your price updates in real time."
+            }
           </p>
         </div>
 
@@ -298,27 +387,55 @@ function ConfigureContent() {
           <div>
             {/* Tier selection */}
             <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", color: "var(--muted)", marginBottom: "1rem" }}>
-              1. Choose your base package
+              1. Choose your package
             </h2>
-            <div className="kd-cfg-tiers" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.75rem", marginBottom: "2.5rem" }}>
+            <div className="kd-cfg-tiers" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.75rem", marginBottom: "2.5rem" }}>
               {tiers.map(t => (
-                <button key={t.id} className={`kd-cfg-tier${selectedTier === t.id ? " active" : ""}`} onClick={() => setSelectedTier(t.id)}>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", color: selectedTier === t.id ? "var(--green)" : "var(--muted)", marginBottom: "0.375rem" }}>
-                    {selectedTier === t.id ? "Selected" : "Select"}
+                <button
+                  key={t.id}
+                  className={`kd-cfg-tier${selectedTier === t.id ? " active" : ""}`}
+                  onClick={() => { setSelectedTier(t.id); setSelectedAddons([]); }}
+                >
+                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", color: selectedTier === t.id ? "var(--green)" : "var(--muted)", marginBottom: "0.375rem" }}>
+                    {selectedTier === t.id ? "Selected" : t.type === "ai" ? "AI" : "Website"}
                   </div>
-                  <div style={{ fontFamily: "var(--font-serif)", fontSize: "1.375rem", color: "var(--dark)", marginBottom: "0.25rem" }}>{t.name}</div>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "1.125rem", fontWeight: 600, color: "var(--green)", marginBottom: "0.25rem" }}>R{t.basePrice.toLocaleString()}</div>
-                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--muted)" }}>+ R{t.monthly.toLocaleString()}/mo</div>
+                  <div style={{ fontFamily: "var(--font-serif)", fontSize: "1.25rem", color: "var(--dark)", marginBottom: "0.25rem" }}>{t.name}</div>
+                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "1rem", fontWeight: 600, color: "var(--green)", marginBottom: "0.25rem" }}>
+                    {t.basePrice ? `From R${t.basePrice.toLocaleString()}` : "Let's scope it"}
+                  </div>
+                  <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.7rem", color: "var(--muted)" }}>
+                    {t.monthly ? (t.type === "ai" ? "per month" : `+ R${t.monthly.toLocaleString()}/mo`) : "Project based"}
+                  </div>
                 </button>
               ))}
             </div>
 
+            {/* Features for selected tier */}
+            <div style={{ marginBottom: "2.5rem", padding: "1.25rem 1.5rem", background: "rgba(58,138,98,0.03)", border: "1px solid rgba(58,138,98,0.1)", borderRadius: "1rem" }}>
+              <h3 style={{ fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", color: "var(--green)", marginBottom: "0.75rem" }}>
+                What's included in {tier.name}
+              </h3>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.375rem 1.5rem" }}>
+                {tier.features.map(f => (
+                  <div key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem", fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--muted)", lineHeight: 1.5 }}>
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--green)" style={{ flexShrink: 0, marginTop: "2px" }}>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {f}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Add-ons */}
             <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", color: "var(--muted)", marginBottom: "0.5rem" }}>
-              2. Add extras
+              2. {tier.type === "ai" ? "What do you need automated?" : "Add extras"}
             </h2>
             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--muted)", marginBottom: "1rem" }}>
-              Ticked items are included in your selected package.
+              {tier.type === "ai"
+                ? "Select everything that applies. This helps us scope the consultation."
+                : "Ticked items are included in your selected package."
+              }
             </p>
             {addons.map(addon => {
               const included = isIncluded(addon.id);
@@ -341,7 +458,7 @@ function ConfigureContent() {
                     {included && <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.7rem", color: "var(--green)", marginLeft: "0.5rem" }}>Included</span>}
                   </span>
                   <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", fontWeight: 600, color: addon.consultative ? "var(--muted)" : included ? "var(--green)" : "var(--green)", flexShrink: 0 }}>
-                    {addon.consultative ? "Consultative" : included ? "✓" : `+R${addon.price.toLocaleString()}`}
+                    {addon.consultative ? "Included in scope" : included ? "\u2713" : `+R${addon.price.toLocaleString()}`}
                   </span>
                 </button>
               );
@@ -350,12 +467,15 @@ function ConfigureContent() {
             {/* Message */}
             <div style={{ marginTop: "2rem" }}>
               <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", color: "var(--muted)", marginBottom: "1rem" }}>
-                3. Anything else we should know?
+                3. {tier.type === "ai" ? "Tell us about your business" : "Anything else we should know?"}
               </h2>
               <textarea
                 value={message}
                 onChange={e => setMessage(e.target.value)}
-                placeholder="Tell us about your business, your customers, your goals, or any specific requirements..."
+                placeholder={tier.type === "ai"
+                  ? "Describe the manual processes you want automated, what software your team currently uses, how many staff are involved, and any specific pain points..."
+                  : "Tell us about your business, your customers, your goals, or any specific requirements..."
+                }
                 style={{ width: "100%", minHeight: "8rem", background: "var(--cream2)", border: "1px solid rgba(45,106,79,0.15)", borderRadius: "0.875rem", padding: "1rem", fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "var(--dark)", resize: "vertical", outline: "none", boxSizing: "border-box" }}
               />
             </div>
@@ -365,18 +485,21 @@ function ConfigureContent() {
           <div className="kd-cfg-sticky" style={{ position: "sticky", top: "5rem" }}>
             <div style={{ background: "var(--dark)", borderRadius: "1.375rem", padding: "2rem", marginBottom: "1rem" }}>
               <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase", color: "var(--green3)", marginBottom: "1.25rem" }}>
-                Your quote
+                {tier.type === "ai" ? "Your request" : "Your quote"}
               </p>
 
               <div style={{ borderBottom: "1px solid rgba(245,244,239,0.08)", paddingBottom: "1rem", marginBottom: "1rem" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.125rem", color: "var(--cream)" }}>{tier.name}</span>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", fontWeight: 600, color: "var(--cream)" }}>R{tier.basePrice.toLocaleString()}</span>
+                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", fontWeight: 600, color: "var(--cream)" }}>
+                    {tier.basePrice ? `R${tier.basePrice.toLocaleString()}` : "TBC"}
+                  </span>
                 </div>
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.4)" }}>Base package</span>
+                <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.4)" }}>
+                  {tier.type === "ai" ? "Starting from" : "Base package"}
+                </span>
               </div>
 
-              {/* Extra addons only (not included ones) */}
               {selectedAddons.filter(id => !isIncluded(id)).length > 0 && (
                 <div style={{ borderBottom: "1px solid rgba(245,244,239,0.08)", paddingBottom: "1rem", marginBottom: "1rem" }}>
                   {selectedAddons.filter(id => !isIncluded(id)).map(id => {
@@ -386,7 +509,7 @@ function ConfigureContent() {
                       <div key={id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
                         <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "rgba(245,244,239,0.6)", flex: 1, paddingRight: "0.5rem" }}>{addon.label}</span>
                         <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 600, color: addon.consultative ? "rgba(245,244,239,0.4)" : "var(--green3)", flexShrink: 0 }}>
-                          {addon.consultative ? "TBC" : `+R${addon.price.toLocaleString()}`}
+                          {addon.consultative ? "In scope" : `+R${addon.price.toLocaleString()}`}
                         </span>
                       </div>
                     );
@@ -395,48 +518,40 @@ function ConfigureContent() {
               )}
 
               <div style={{ marginBottom: "1.5rem" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.375rem" }}>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "rgba(245,244,239,0.5)" }}>Once-off total</span>
-                  <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.625rem", color: "var(--cream)" }}>
-                    {consultative ? "Consultative" : `R${base.toLocaleString()}`}
-                  </span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "rgba(245,244,239,0.5)" }}>Monthly retainer</span>
-                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", fontWeight: 600, color: "var(--green3)" }}>R{monthly.toLocaleString()}/mo</span>
-                </div>
-                {consultative && (
-                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.35)", marginTop: "0.5rem", lineHeight: 1.5 }}>
-                    Some selections require a consultation to price accurately. We will confirm the full amount before any commitment.
-                  </p>
+                {tier.type === "ai" ? (
+                  <>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.375rem" }}>
+                      <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "rgba(245,244,239,0.5)" }}>Monthly from</span>
+                      <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.625rem", color: "var(--cream)" }}>
+                        {tier.monthly ? `R${tier.monthly.toLocaleString()}/mo` : "TBC"}
+                      </span>
+                    </div>
+                    <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.35)", marginTop: "0.5rem", lineHeight: 1.5 }}>
+                      Final pricing confirmed after consultation based on the scope of automation required.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.375rem" }}>
+                      <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "rgba(245,244,239,0.5)" }}>Once-off total</span>
+                      <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.625rem", color: "var(--cream)" }}>
+                        {consultative ? "Consultative" : `R${base.toLocaleString()}`}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "rgba(245,244,239,0.5)" }}>Monthly retainer</span>
+                      <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", fontWeight: 600, color: "var(--green3)" }}>R{(monthly || 0).toLocaleString()}/mo</span>
+                    </div>
+                  </>
                 )}
               </div>
 
               <button className="kd-cfg-submit" onClick={handleSubmit} disabled={submitting}>
-                {submitting ? "Submitting..." : user ? "Submit my brief" : "Get my quote"}
+                {submitting ? "Submitting..." : user
+                  ? (tier.type === "ai" ? "Request consultation" : "Submit my brief")
+                  : (tier.type === "ai" ? "Request consultation" : "Get my quote")
+                }
               </button>
-
-              {/* Upgrade nudge */}
-              {selectedTier === "starter" && base >= 10000 && (
-                <div style={{ marginTop: "1rem", padding: "0.875rem", background: "rgba(93,191,136,0.1)", borderRadius: "0.75rem", border: "1px solid rgba(93,191,136,0.25)" }}>
-                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--green3)", lineHeight: 1.5, margin: 0 }}>
-                    Your extras are pushing you close to Growth (R12,000) which includes more features for a similar price.
-                    <button onClick={() => setSelectedTier("growth")} style={{ display: "block", marginTop: "0.5rem", background: "none", border: "none", color: "var(--green3)", fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer", padding: 0, textDecoration: "underline" }}>
-                      Switch to Growth
-                    </button>
-                  </p>
-                </div>
-              )}
-              {selectedTier === "growth" && base >= 18000 && (
-                <div style={{ marginTop: "1rem", padding: "0.875rem", background: "rgba(93,191,136,0.1)", borderRadius: "0.75rem", border: "1px solid rgba(93,191,136,0.25)" }}>
-                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--green3)", lineHeight: 1.5, margin: 0 }}>
-                    Your extras are close to Pro (R22,000) which includes everything plus a monthly strategy call and priority turnaround.
-                    <button onClick={() => setSelectedTier("pro")} style={{ display: "block", marginTop: "0.5rem", background: "none", border: "none", color: "var(--green3)", fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 600, cursor: "pointer", padding: 0, textDecoration: "underline" }}>
-                      Switch to Pro
-                    </button>
-                  </p>
-                </div>
-              )}
 
               {!user && (
                 <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "rgba(245,244,239,0.35)", textAlign: "center", marginTop: "0.75rem" }}>
@@ -446,7 +561,10 @@ function ConfigureContent() {
             </div>
 
             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--muted)", textAlign: "center", lineHeight: 1.6 }}>
-              No payment required now. 50% deposit only once you approve the proposal.
+              {tier.type === "ai"
+                ? "No commitment required. We scope it first, you decide after."
+                : "No payment required now. 50% deposit only once you approve the proposal."
+              }
             </p>
           </div>
         </div>
