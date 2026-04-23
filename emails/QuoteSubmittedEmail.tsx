@@ -175,7 +175,7 @@ export default function QuoteSubmittedEmail({
           {/* Footer */}
           <Section style={footer}>
             <Text style={footerText}>
-              Kleinhans Digital · info@kleinhansdigital.co.za · +27 66 241 0344
+              Kleinhans Digital · info@kleinhansdigital.co.za · +27 72 634 0848
             </Text>
             <Text style={footerText}>This is an automated notification from your client portal.</Text>
           </Section>

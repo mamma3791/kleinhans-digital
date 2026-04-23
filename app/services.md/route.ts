@@ -115,7 +115,7 @@ All prices exclude VAT. 50% deposit to begin.
 
 ---
 
-**Contact:** info@kleinhansdigital.co.za | WhatsApp: +27 66 241 0344
+**Contact:** info@kleinhansdigital.co.za | WhatsApp: +27 72 634 0848
 **Website:** https://kleinhansdigital.co.za
 `;
 

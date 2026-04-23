@@ -151,7 +151,7 @@ export default function Contact() {
             >
               {[
                 { label: "Email", value: "info@kleinhansdigital.co.za", href: "mailto:info@kleinhansdigital.co.za" },
-                { label: "WhatsApp", value: "066 241 0344", href: "https://wa.me/27662410344" },
+                { label: "WhatsApp", value: "072 634 0848", href: "https://wa.me/27726340848" },
                 { label: "Location", value: "Johannesburg, Gauteng", href: null },
               ].map((item) => (
                 <div key={item.label} style={{
@@ -184,7 +184,7 @@ export default function Contact() {
             </motion.div>
 
             <motion.a
-              href="https://wa.me/27662410344?text=Hi%20Kleinhans%20Digital%2C%20I%27d%20like%20to%20enquire%20about%20your%20AI%20workflow%20solutions."
+              href="https://wa.me/27726340848?text=Hi%20Kleinhans%20Digital%2C%20I%27d%20like%20to%20enquire%20about%20your%20AI%20workflow%20solutions."
               target="_blank"
               rel="noopener noreferrer"
               className="kd-wa-btn"

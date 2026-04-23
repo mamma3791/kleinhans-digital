@@ -20,7 +20,7 @@ const localBusinessSchema = {
   "alternateName": "LRWKleinhans (Pty) Ltd",
   "description": "Custom software development and AI workflow automation for South African SMEs. Local AI deployment, complete data privacy, POPIA compliant.",
   "url": "https://kleinhansdigital.co.za",
-  "telephone": "+27662410344",
+  "telephone": "+27726340848",
   "email": "info@kleinhansdigital.co.za",
   "address": {
     "@type": "PostalAddress",

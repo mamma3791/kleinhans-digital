@@ -121,7 +121,7 @@ Branch A — `type = "quote_submitted"`:
 - Send email to `info@kleinhansdigital.co.za`:
   - Subject: `New quote: [user_name] — [tier] package`
   - Body: name, email, tier, R[base_price] + R[monthly_price]/mo, add-ons list, their message, link to admin panel (`https://kleinhansdigital.co.za/admin`)
-- Send WhatsApp message to +27662410344 via WhatsApp Business API (or Twilio): `New quote from [user_name] — [tier] R[base_price]. Check admin panel.`
+- Send WhatsApp message to +27726340848 via WhatsApp Business API (or Twilio): `New quote from [user_name] — [tier] R[base_price]. Check admin panel.`
 
 Branch B — `type = "quote_approved"`:
 - Send email to the client (`client_email`):
@@ -407,7 +407,7 @@ The platform (this codebase, client portal, admin panel) adds a premium above a 
     ---
     Review in admin: https://kleinhansdigital.co.za/admin
     ```
-- Module 4: WhatsApp Business API (or Twilio) → Send message to +27662410344
+- Module 4: WhatsApp Business API (or Twilio) → Send message to +27726340848
   - `New quote from {{user_name}} — {{tier}} R{{base_price}}. Check admin: kleinhansdigital.co.za/admin`
 
 **Branch 2 — Quote approved:**
@@ -431,13 +431,13 @@ The platform (this codebase, client portal, admin panel) adds a premium above a 
     Jason
     Kleinhans Digital
     ```
-- Module 4: WhatsApp to +27662410344
+- Module 4: WhatsApp to +27726340848
   - `Project approved: {{project_name}} for {{client_name}}. Send deposit invoice.`
 
 **Branch 3 — Contact form:**
 - Module 3: Google Sheets → Add row (Sheet: "Leads")
   - Columns: Date, Name, Business, Email, Phone, Message
-- Module 4 (optional): WhatsApp to +27662410344
+- Module 4 (optional): WhatsApp to +27726340848
   - `Contact form: {{name}} from {{business}} — {{email}}`
 
 ---
@@ -457,7 +457,7 @@ The platform (this codebase, client portal, admin panel) adds a premium above a 
 
 **Module 5:** Filter — invoices array is empty (no invoice sent yet)
 
-**Module 6:** WhatsApp to +27662410344
+**Module 6:** WhatsApp to +27726340848
 - `Reminder: No deposit invoice sent for {{project_name}} (created yesterday). Create one in /admin.`
 
 ---

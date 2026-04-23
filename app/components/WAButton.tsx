@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 export default function WAButton() {
   return (
     <motion.a
-      href="https://wa.me/27662410344?text=Hi%20Kleinhans%20Digital%2C%20I%27d%20like%20to%20enquire%20about%20a%20website."
+      href="https://wa.me/27726340848?text=Hi%20Kleinhans%20Digital%2C%20I%27d%20like%20to%20enquire%20about%20a%20website."
       target="_blank"
       rel="noopener noreferrer"
       initial={{ scale: 0, opacity: 0 }}

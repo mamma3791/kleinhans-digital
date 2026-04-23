@@ -116,7 +116,7 @@ export default function ContactFormEmail({
           {/* Footer */}
           <Section style={footer}>
             <Text style={footerText}>
-              Kleinhans Digital · info@kleinhansdigital.co.za · +27 66 241 0344
+              Kleinhans Digital · info@kleinhansdigital.co.za · +27 72 634 0848
             </Text>
             <Text style={footerText}>Submitted via kleinhansdigital.co.za/contact</Text>
           </Section>

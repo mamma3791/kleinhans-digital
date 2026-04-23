@@ -80,7 +80,7 @@ function OnboardingContent() {
             {[
               { label: "Your full name", value: fullName, setter: setFullName, placeholder: "Jason Kleinhans", type: "text" },
               { label: "Business name", value: businessName, setter: setBusinessName, placeholder: "Kleinhans Digital", type: "text" },
-              { label: "Phone / WhatsApp", value: phone, setter: setPhone, placeholder: "066 241 0344", type: "tel" },
+              { label: "Phone / WhatsApp", value: phone, setter: setPhone, placeholder: "072 634 0848", type: "tel" },
             ].map(field => (
               <div key={field.label}>
                 <label style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", fontWeight: 500, color: "var(--dark)", display: "block", marginBottom: "0.375rem" }}>

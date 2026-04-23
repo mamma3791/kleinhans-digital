@@ -36,7 +36,7 @@ Schema markup, meta structure, Google My Business, and local SEO are built into 
 
 ## Contact
 - Email: info@kleinhansdigital.co.za
-- WhatsApp: +27 66 241 0344
+- WhatsApp: +27 72 634 0848
 - Website: https://kleinhansdigital.co.za
 - Instagram: @kleinhans_digital
 - Google My Business: Kleinhans Digital, Johannesburg

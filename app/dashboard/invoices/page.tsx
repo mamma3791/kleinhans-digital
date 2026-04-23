@@ -126,7 +126,7 @@ export default async function InvoicesPage() {
                       )}
                       {(invoice.status === "sent" || isOverdueDisplay) && (
                         <a
-                          href={`https://wa.me/27662410344?text=${encodeURIComponent(`Hi, I'd like to pay invoice ${invoice.invoice_number} (R${Number(invoice.amount).toLocaleString("en-ZA")}). What are the payment details?`)}`}
+                          href={`https://wa.me/27726340848?text=${encodeURIComponent(`Hi, I'd like to pay invoice ${invoice.invoice_number} (R${Number(invoice.amount).toLocaleString("en-ZA")}). What are the payment details?`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="kd-dash-btn"

@@ -184,7 +184,7 @@ export default function QuoteApprovedEmail({
           {/* Footer */}
           <Section style={footer}>
             <Text style={footerText}>
-              Questions? Reply to this email or WhatsApp us at +27 66 241 0344
+              Questions? Reply to this email or WhatsApp us at +27 72 634 0848
             </Text>
             <Text style={footerText}>
               info@kleinhansdigital.co.za · kleinhansdigital.co.za

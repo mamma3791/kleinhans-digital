@@ -102,8 +102,8 @@ export default function Footer() {
               <a href="mailto:info@kleinhansdigital.co.za" className="kd-footer-link">
                 info@kleinhansdigital.co.za
               </a>
-              <a href="https://wa.me/27662410344" className="kd-footer-link">
-                066 241 0344
+              <a href="https://wa.me/27726340848" className="kd-footer-link">
+                072 634 0848
               </a>
               <a href="https://www.instagram.com/kleinhans_digital" target="_blank" rel="noopener noreferrer" className="kd-footer-link">
                 @kleinhans_digital

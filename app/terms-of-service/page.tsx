@@ -265,7 +265,7 @@ export default function TermsOfServicePage() {
         <ul className="kd-legal-ul">
           <li><strong>Company:</strong> LRWKleinhans (Pty) Ltd (trading as Kleinhans Digital)</li>
           <li><strong>Email:</strong> <a href="mailto:info@kleinhansdigital.co.za" style={{ color: "var(--green)" }}>info@kleinhansdigital.co.za</a></li>
-          <li><strong>WhatsApp:</strong> <a href="https://wa.me/27662410344" style={{ color: "var(--green)" }}>+27 66 241 0344</a></li>
+          <li><strong>WhatsApp:</strong> <a href="https://wa.me/27726340848" style={{ color: "var(--green)" }}>+27 72 634 0848</a></li>
           <li><strong>Location:</strong> Johannesburg, Gauteng, South Africa</li>
         </ul>
 

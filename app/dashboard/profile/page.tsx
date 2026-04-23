@@ -42,7 +42,7 @@ export default async function ProfilePage() {
               For urgent project questions, reach us directly on WhatsApp.
             </p>
             <a
-              href="https://wa.me/27662410344"
+              href="https://wa.me/27726340848"
               target="_blank"
               rel="noopener noreferrer"
               className="kd-dash-btn"
